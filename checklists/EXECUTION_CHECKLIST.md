@@ -1,0 +1,73 @@
+# Execution Checklist
+
+Use this checklist before closing any meaningful coding-agent task.
+
+## Classification
+
+| Check | Status | Notes |
+|---|---|---|
+| Task type was classified as `quick-fix`, `feature`, `product-feature`, `architecture`, `security-data`, `release` or `investigation`. |  |  |
+| Execution mode was selected as `solo`, `review-pair` or `squad`. |  |  |
+| Risk level and production impact were considered. |  |  |
+
+## Product and specification
+
+| Check | Status | Notes |
+|---|---|---|
+| Product intent is clear enough for the current scope. |  |  |
+| Open questions are recorded instead of hidden. |  |  |
+| Requirements have stable IDs where relevant. |  |  |
+| Acceptance criteria are testable. |  |  |
+| Out-of-scope items are explicit. |  |  |
+
+## Git safety
+
+| Check | Status | Notes |
+|---|---|---|
+| `git status` was checked before changes. |  |  |
+| Current branch was identified. |  |  |
+| User changes were not overwritten. |  |  |
+| Risky or non-trivial work used a branch or worktree when appropriate. |  |  |
+
+## Implementation
+
+| Check | Status | Notes |
+|---|---|---|
+| Work was broken into small tasks. |  |  |
+| Each change maps to requirement IDs or clear task objectives. |  |  |
+| Scope did not expand silently. |  |  |
+| Tests were not weakened or bypassed. |  |  |
+
+## Verification
+
+| Check | Status | Notes |
+|---|---|---|
+| Relevant unit/integration/e2e tests were run or explicitly marked unavailable. |  |  |
+| Lint/typecheck/build were run when relevant. |  |  |
+| Security/data/auth checks were run when relevant. |  |  |
+| Manual verification was described when automation was not available. |  |  |
+| Remaining blind spots were documented. |  |  |
+
+## Release and measurement
+
+| Check | Status | Notes |
+|---|---|---|
+| Release plan exists when users or production are affected. |  |  |
+| Rollback path is explicit. |  |  |
+| Logs, metrics or alerts are defined when behavior is user-facing or operational. |  |  |
+| Post-launch learning or review is defined when relevant. |  |  |
+
+## Handoff
+
+| Check | Status | Notes |
+|---|---|---|
+| `.harness/EVALUATION_REPORT.md` exists or final response includes equivalent evidence. |  |  |
+| `.harness/HANDOFF.md` exists for meaningful work. |  |  |
+| Files changed and commands run are listed. |  |  |
+| Next action is clear. |  |  |
+
+## Change history
+
+| Date | Time | Reason |
+|---|---|---|
+| 2026-05-28 | 13:20 GMT-3 | Updated checklist to match the portable harness workflow and artifact matrix. |
