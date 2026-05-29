@@ -65,6 +65,20 @@ O modo `solo` usa um único agente para executar o loop inteiro. É adequado par
 
 A decisão de modo deve considerar risco, escopo, impacto em produção, sensibilidade dos dados, ambiguidade e custo de coordenação.
 
+## Camada de especificação semântica
+
+A análise do artigo sobre VibeCoding State-of-the-Art-Driven Development reforça um ponto importante: agentes de coding não devem ser usados apenas como geradores de boilerplate. Em tarefas arquiteturais, agentic workflows, automações ou sistemas AI-native, o agente deve primeiro declarar o comportamento e as garantias do sistema.
+
+A skill incorpora essa ideia por meio de `.harness/SEMANTIC_SPEC.md` e `references/semantic-system-design.md`. O objetivo não é obrigar o uso de BE2E, de uma DSL específica, de event sourcing ou de uma arquitetura hyper-polyglot. O objetivo é tornar explícitos comportamento, trigger, invariantes, garantias, constraints, eventos, estado, replay, auditabilidade, observabilidade, falhas e segurança antes da implementação.
+
+| Conceito do artigo | Adaptação na skill |
+|---|---|
+| IA como parceira de arquitetura | O agente deve fazer revisão arquitetural proporcional ao risco antes de decisões estruturais. |
+| Uma declaração semântica antes de várias implementações | O template `SEMANTIC_SPEC.md` registra behavior contracts antes de arquivos e funções. |
+| Runtime carrega complexidade | A skill usa artefatos repetíveis para reduzir complexidade operacional e evitar drift entre camadas. |
+| Observabilidade, replay e auditabilidade | O release gate e os sensores passam a exigir evidência operacional quando o comportamento for crítico. |
+| State-of-the-art-driven development | A referência de design semântico pede comparação entre padrões modernos e a opção mais simples suficiente. |
+
 ## Sensores
 
 A skill diferencia sensores computacionais e sensores inferenciais. Sensores computacionais são testes, lint, typecheck, build, validação de schema, execução local, migração em dry-run, checks de acessibilidade e scans de segurança. Sensores inferenciais são revisões por IA, críticas de arquitetura, raciocínio de segurança e análise de cobertura de requisitos.
@@ -84,3 +98,4 @@ Em agentes baseados em diretório de skills, copie o diretório inteiro da skill
 | Data | Hora | Motivo |
 |---|---|---|
 | 2026-05-28 | 13:18 GMT-3 | Atualização do guia para refletir a estrutura portátil, removendo dependência de subskills instaláveis e explicando o uso por qualquer agente de coding. |
+| 2026-05-29 | 05:54 GMT-3 | Added semantic specification section, connecting VibeCoding state-of-the-art-driven development concepts to portable behavior contracts and proportional architecture review. |

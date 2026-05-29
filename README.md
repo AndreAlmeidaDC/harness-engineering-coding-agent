@@ -4,7 +4,7 @@
 
 Este repositório reúne uma skill operacional portátil para agentes de coding trabalharem com método, rastreabilidade, validação e responsabilidade. Ela foi pensada para qualquer agente capaz de ler arquivos, alterar código, executar comandos e registrar progresso: Claude Code, Codex, Cursor, Windsurf, Gemini CLI, OpenCode, agentes locais ou agentes internos de empresas.
 
-A tese é simples: **modelo bom não basta**. Aplicações reais não nascem apenas de prompts bons. Elas nascem de um ambiente de trabalho bem desenhado: contexto certo, especificação clara, ferramentas seguras, sensores objetivos, logs, critérios de aceite, controle de escopo, revisão e aprendizado pós-lançamento.
+A tese é simples: **modelo bom não basta**. Aplicações reais não nascem apenas de prompts bons. Elas nascem de um ambiente de trabalho bem desenhado: contexto certo, especificação clara, contrato semântico quando necessário, ferramentas seguras, sensores objetivos, logs, critérios de aceite, controle de escopo, revisão e aprendizado pós-lançamento.
 
 > **Código não é software.** Software inclui requisitos, arquitetura, dados, fluxos de usuário, segurança, testes, deployment, observabilidade, manutenção e o processo que mantém tudo coerente ao longo do tempo.
 
@@ -13,8 +13,8 @@ A tese é simples: **modelo bom não basta**. Aplicações reais não nascem ape
 | Caminho | Função |
 |---|---|
 | `SKILL.md` | Skill principal, com frontmatter, gatilhos de uso, workflow, gates e regras não negociáveis. |
-| `references/` | Módulos operacionais lidos sob demanda: descoberta de produto, PRD/spec, release/medição e squad mode. |
-| `templates/` | Templates reutilizáveis para `AGENTS.md`, contrato, critérios de aceite, plano de testes, estado, avaliação e handoff. |
+| `references/` | Módulos operacionais lidos sob demanda: descoberta de produto, PRD/spec, design semântico, release/medição e squad mode. |
+| `templates/` | Templates reutilizáveis para `AGENTS.md`, contrato, especificação semântica, critérios de aceite, plano de testes, estado, avaliação e handoff. |
 | `checklists/` | Checklist de execução para uso em revisão ou antes de encerrar uma tarefa. |
 | `examples/` | Exemplo mínimo de aplicação da skill em uma tarefa real. |
 | `docs/` | Guia conceitual consolidado para humanos entenderem e adaptarem o método. |
@@ -56,6 +56,7 @@ Quando a tarefa envolver descoberta de produto, PRD, alteração de código, fea
 Product Intent
 → Product Engineering Discovery
 → PRD / Spec / Contract
+→ Semantic Behavior Spec, when needed
 → Task Breakdown
 → Implementation Harness
 → Evaluation Gates
@@ -93,6 +94,7 @@ docs/product/PRODUCT_INTENT.md
 docs/product/PRD.md
 docs/product/METRICS_PLAN.md
 docs/product/POST_LAUNCH_REVIEW.md
+.harness/SEMANTIC_SPEC.md
 docs/architecture/ARCHITECTURE.md
 docs/decisions/DECISION_LOG.md
 docs/release/RELEASE_PLAN.md
@@ -100,13 +102,19 @@ docs/release/RELEASE_PLAN.md
 
 ## Quando usar
 
-Use esta skill quando a tarefa envolver construir uma aplicação com agentes de IA, transformar ideia em especificação, implementar feature com frontend, backend, auth, banco ou integração, corrigir bug com impacto relevante, mexer em arquitetura, segurança, permissões, dados ou produção, refatorar código que precisa continuar funcionando, lançar funcionalidade para usuários reais ou medir adoção, impacto e aprendizado.
+Use esta skill quando a tarefa envolver construir uma aplicação com agentes de IA, transformar ideia em especificação, implementar feature com frontend, backend, auth, banco ou integração, corrigir bug com impacto relevante, mexer em arquitetura, segurança, permissões, dados ou produção, refatorar código que precisa continuar funcionando, lançar funcionalidade para usuários reais, medir adoção, impacto e aprendizado, ou definir comportamentos, garantias, constraints, eventos, replay, auditabilidade e observabilidade de sistemas AI-native.
 
 ## Quando não usar o fluxo completo
 
 Não use o fluxo completo para pergunta simples, snippet descartável, prova de conceito sem compromisso de manutenção, exploração técnica rápida ou tarefa de baixo risco com um único arquivo e sem efeito externo.
 
 Mesmo nesses casos, preserve Git, escopo e critérios básicos de pronto.
+
+## Inspiração conceitual
+
+A camada de especificação semântica foi reforçada após análise do artigo [VibeCoding State-of-the-Art-Driven Development](https://dev.to/fullagenticstack/vibecoding-state-of-the-art-driven-development-31ne). A ideia incorporada não foi a adoção literal de uma DSL, runtime ou stack hyper-polyglot, mas o princípio de que agentes de coding devem declarar comportamentos, garantias, constraints, eventos, estado, replay e observabilidade antes de espalhar implementação por múltiplas camadas.
+
+Na prática, isso aparece em `.harness/SEMANTIC_SPEC.md` e `references/semantic-system-design.md`. Esses artefatos são opcionais e proporcionais ao risco; eles existem para tarefas arquiteturais, agentic workflows, automações e sistemas AI-native, não para transformar correções simples em burocracia.
 
 ## Validação local
 
@@ -134,3 +142,4 @@ MIT. Consulte `LICENSE`.
 | Data | Hora | Motivo |
 |---|---|---|
 | 2026-05-28 | 13:05 GMT-3 | Reorganização para repositório público portátil, separando skill principal, referências, templates, documentação humana e validação local. |
+| 2026-05-29 | 05:52 GMT-3 | Incorporação de camada de especificação semântica, referência a state-of-the-art review e template `SEMANTIC_SPEC.md` após análise de artigo sobre VibeCoding State-of-the-Art-Driven Development. |

@@ -20,6 +20,15 @@ Use this checklist before closing any meaningful coding-agent task.
 | Acceptance criteria are testable. |  |  |
 | Out-of-scope items are explicit. |  |  |
 
+## Semantic design
+
+| Check | Status | Notes |
+|---|---|---|
+| `.harness/SEMANTIC_SPEC.md` was created or explicitly deemed unnecessary for the task risk. |  |  |
+| Behaviors, guarantees, constraints, events, state and failure modes are explicit when relevant. |  |  |
+| Replay, auditability and observability requirements were considered for agentic or AI-native behavior. |  |  |
+| State-of-the-art review was proportionate and did not introduce unnecessary architecture. |  |  |
+
 ## Git safety
 
 | Check | Status | Notes |
@@ -71,3 +80,4 @@ Use this checklist before closing any meaningful coding-agent task.
 | Date | Time | Reason |
 |---|---|---|
 | 2026-05-28 | 13:20 GMT-3 | Updated checklist to match the portable harness workflow and artifact matrix. |
+| 2026-05-29 | 05:55 GMT-3 | Added semantic design checks for behavior contracts, replay, auditability, observability and proportional architecture review. |

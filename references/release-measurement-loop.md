@@ -24,7 +24,7 @@ Load this file for production deployment, staged rollout, feature flags, databas
 - Is there a rollback strategy?
 - Who owns the release?
 - What is the blast radius?
-- What logs and metrics are required?
+- What logs, metrics, traces, audit events and replay evidence are required?
 - What alerts are required?
 - What is the post-launch review date?
 
@@ -42,7 +42,21 @@ A release plan is weak if rollback is described only as “revert if needed”. 
 
 ## Observability standard
 
-Do not launch unobservable behavior. For user-facing or operational changes, define logs, metrics, dashboards or alerts before treating deployment as success.
+Do not launch unobservable behavior. For user-facing, operational, agentic or AI-native changes, define logs, metrics, dashboards, traces, audit events or replay evidence before treating deployment as success.
+
+## Replay, auditability and semantic observability
+
+For agentic workflows, automations, AI-native behavior or distributed operations, release readiness must include more than uptime. The system should expose enough evidence to understand what happened, why it happened and whether the behavior can be reconstructed after the fact.
+
+| Concern | Release question |
+|---|---|
+| Replay | Can the behavior be reconstructed from events, logs, traces or audit records? |
+| Auditability | Can a human explain who or what triggered the behavior and which decision path was followed? |
+| Semantic observability | Do signals map to user/system behaviors rather than only low-level infrastructure metrics? |
+| Sensitive data | Are logs, traces and events free from secrets, tokens and unnecessary personal data? |
+| Recovery | Is there a defined path for retry, rollback, compensation or human intervention? |
+
+Do not add event sourcing, graph storage, vector storage or specialized infrastructure by default. Add them only when the semantic requirements justify the complexity.
 
 ## Rules
 
@@ -53,3 +67,4 @@ Do not launch critical changes without rollback. Do not launch unobservable beha
 | Date | Time | Reason |
 |---|---|---|
 | 2026-05-28 | 13:12 GMT-3 | Converted from subskill to portable reference and expanded rollback and observability standards. |
+| 2026-05-29 | 05:56 GMT-3 | Added replay, auditability and semantic observability guidance for AI-native and agentic releases. |

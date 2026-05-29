@@ -1,6 +1,6 @@
 ---
 name: harness-engineering-coding-agent
-description: Portable operational workflow for AI coding agents. Use for software development tasks involving product discovery, PRD/specification, architecture, coding, bugfixes, refactors, integrations, tests, auth, data, security, CI/CD, release, observability, rollback, evaluation and handoff. Também use para agentes de coding, desenvolvimento com IA, critérios de aceite, plano de testes, revisão, deploy seguro e medição pós-lançamento.
+description: Portable operational workflow for AI coding agents. Use for software development tasks involving product discovery, PRD/specification, architecture, semantic specifications, coding, bugfixes, refactors, integrations, tests, auth, data, security, CI/CD, release, observability, replayability, rollback, evaluation and handoff. Também use para agentes de coding, desenvolvimento com IA, critérios de aceite, plano de testes, revisão, deploy seguro e medição pós-lançamento.
 ---
 
 # Harness Engineering Coding Agent
@@ -36,6 +36,7 @@ Use this skill when the task involves any of the following:
 - security, permissions, RLS, payments, credentials or personal data;
 - CI/CD, release planning, feature flags, rollback or monitoring;
 - evaluating whether an AI-generated change is good enough;
+- designing semantic behavior contracts, agentic workflows, automations or AI-native systems;
 - long-running tasks where another agent or human may need to resume later.
 
 ## When not to use the full workflow
@@ -82,6 +83,7 @@ docs/product/PRODUCT_INTENT.md
 docs/product/PRD.md
 docs/product/METRICS_PLAN.md
 docs/product/POST_LAUNCH_REVIEW.md
+.harness/SEMANTIC_SPEC.md
 docs/architecture/ARCHITECTURE.md
 docs/decisions/DECISION_LOG.md
 docs/release/RELEASE_PLAN.md
@@ -95,10 +97,10 @@ Keep `AGENTS.md` short. It should point to the right docs, commands and constrai
 |---|---|---|
 | `quick-fix` | final summary with verification; `.harness/HANDOFF.md` if state matters | `.harness/EVALUATION_REPORT.md` |
 | `feature` | `.harness/CONTRACT.md`, `.harness/ACCEPTANCE_CRITERIA.md`, `.harness/TEST_PLAN.md`, `.harness/HANDOFF.md` | `docs/product/PRD.md` |
-| `product-feature` | `docs/product/PRODUCT_INTENT.md`, `docs/product/PRD.md`, `.harness/CONTRACT.md`, `.harness/HANDOFF.md` | `docs/product/METRICS_PLAN.md` |
-| `architecture` | `.harness/CONTRACT.md`, `docs/architecture/ARCHITECTURE.md`, `docs/decisions/DECISION_LOG.md`, `.harness/HANDOFF.md` | `.harness/EVALUATION_REPORT.md` |
+| `product-feature` | `docs/product/PRODUCT_INTENT.md`, `docs/product/PRD.md`, `.harness/CONTRACT.md`, `.harness/HANDOFF.md` | `.harness/SEMANTIC_SPEC.md`, `docs/product/METRICS_PLAN.md` |
+| `architecture` | `.harness/CONTRACT.md`, `.harness/SEMANTIC_SPEC.md`, `docs/architecture/ARCHITECTURE.md`, `docs/decisions/DECISION_LOG.md`, `.harness/HANDOFF.md` | `.harness/EVALUATION_REPORT.md` |
 | `security-data` | `.harness/CONTRACT.md`, `.harness/ACCEPTANCE_CRITERIA.md`, `.harness/TEST_PLAN.md`, `.harness/EVALUATION_REPORT.md`, `.harness/HANDOFF.md` | `docs/decisions/DECISION_LOG.md` |
-| `release` | `docs/release/RELEASE_PLAN.md`, `.harness/EVALUATION_REPORT.md`, `.harness/HANDOFF.md` | `docs/product/POST_LAUNCH_REVIEW.md` |
+| `release` | `docs/release/RELEASE_PLAN.md`, `.harness/EVALUATION_REPORT.md`, `.harness/HANDOFF.md` | `.harness/SEMANTIC_SPEC.md` when replay/auditability matters, `docs/product/POST_LAUNCH_REVIEW.md` |
 | `investigation` | `.harness/STATE.md`, `.harness/EVALUATION_REPORT.md` or investigation notes, `.harness/HANDOFF.md` | `.harness/OPEN_QUESTIONS.md` |
 
 ## Workflow
@@ -111,6 +113,7 @@ Classify the request before acting. Use one or more of these labels:
 - `feature`: new behavior or UI;
 - `product-feature`: feature with product ambiguity;
 - `architecture`: structural decision or cross-cutting change;
+- `semantic-system`: behaviors, guarantees, constraints, agentic workflows, automations, replayability, auditability or AI-native runtime concerns;
 - `security-data`: auth, permissions, secrets, RLS, payments or personal data;
 - `release`: deployment, flags, rollback, observability;
 - `investigation`: bug diagnosis, research, logs or incident.
@@ -136,6 +139,15 @@ If answers are missing for product-relevant work, read `references/product-engin
 For any feature with more than trivial scope, create or update the contract, acceptance criteria and test plan. Use `references/prd-specification-builder.md` when the product, role, flow, architecture or acceptance criteria are not clear.
 
 The spec must distinguish confirmed facts, decisions, assumptions, open questions and out-of-scope items. Every meaningful requirement must have an ID, for example `BUS-001`, `USER-001`, `AUTH-001`, `DATA-001`, `UI-001`, `SEC-001`, `NFR-001`, `REL-001` or `MET-001`.
+
+
+### Phase 2.5: semantic specification gate
+
+Use this gate for `architecture`, `semantic-system`, agentic workflows, automations, distributed behavior or AI-native systems. Read `references/semantic-system-design.md` and create or update `.harness/SEMANTIC_SPEC.md` when behavior, guarantees, constraints, events, state, replay, auditability or observability are central to the task.
+
+The agent should describe behaviors before files and functions. Prefer plain language, but use lightweight behavior blocks when that makes the contract clearer. The goal is not to impose a DSL or advanced stack; the goal is to prevent duplicated logic, architectural drift and hidden assumptions.
+
+For structural decisions, perform a proportionate state-of-the-art review. Compare the simplest conventional approach with any advanced option such as state machines, workflow engines, event sourcing, actor models, policy engines, graph storage, vector retrieval, CQRS or transactional outbox. Choose the smallest design that preserves the required guarantees.
 
 ### Phase 3: context loading
 
@@ -185,7 +197,7 @@ Do not mix unrelated tasks in the same loop.
 
 ### Phase 7: feedback sensors
 
-Use computational sensors first: unit tests, integration tests, e2e tests, lint, typecheck, build, static analysis, schema validation, migration dry-run, accessibility checks and security scans when applicable.
+Use computational sensors first: unit tests, integration tests, e2e tests, lint, typecheck, build, static analysis, schema validation, migration dry-run, replay/audit checks, accessibility checks and security scans when applicable.
 
 Use inferential sensors second: AI review, architecture critique, UX critique, security reasoning and requirement coverage review.
 
@@ -209,7 +221,7 @@ Answer these release questions:
 - Is there a feature flag?
 - Is there rollback?
 - Who owns the release?
-- What logs, metrics and alerts are needed?
+- What logs, metrics, traces, audit events and replay evidence are needed?
 - What is the blast radius?
 - What is the post-launch review date?
 
@@ -229,7 +241,7 @@ A task is done only when product intent is clear enough for the current scope, s
 
 ## Anti-patterns
 
-Stop and correct course if you detect vibe coding by prompt accumulation, implementation before product intent, PRD with no acceptance criteria, acceptance criteria with no test plan, giant `AGENTS.md` as memory landfill, agent judging its own work without sensors, code compiling but behavior not validated, tests deleted to pass, feature launched without rollback, no owner for post-launch behavior, or logs and metrics added only after an incident.
+Stop and correct course if you detect vibe coding by prompt accumulation, implementation before product intent, PRD with no acceptance criteria, acceptance criteria with no test plan, giant `AGENTS.md` as memory landfill, agent judging its own work without sensors, code compiling but behavior not validated, tests deleted to pass, feature launched without rollback, no owner for post-launch behavior, or logs, metrics, traces or audit events added only after an incident, or architecture chosen before behavior and guarantees are explicit.
 
 ## Output format for agent responses
 
@@ -259,3 +271,4 @@ Next action
 | Date | Time | Reason |
 |---|---|---|
 | 2026-05-28 | 13:00 GMT-3 | Reworked as a portable skill for any AI coding agent, added YAML frontmatter, activation heuristics, artifact matrix, review-pair handoff and stronger verification rules. |
+| 2026-05-29 | 05:50 GMT-3 | Added semantic specification gate, state-of-the-art review guidance, replay/auditability checks and semantic-system classification inspired by VibeCoding state-of-the-art-driven development. |
