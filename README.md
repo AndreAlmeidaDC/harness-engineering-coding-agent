@@ -6,6 +6,8 @@ Este repositório reúne uma skill operacional portátil para agentes de coding 
 
 A tese é simples: **modelo bom não basta**. Aplicações reais não nascem apenas de prompts bons. Elas nascem de um ambiente de trabalho bem desenhado: contexto certo, especificação clara, contrato semântico quando necessário, ferramentas seguras, sensores objetivos, logs, critérios de aceite, controle de escopo, revisão e aprendizado pós-lançamento.
 
+Essa tese não parte apenas de experiência prática. Ela dialoga com uma linha recente de pesquisa que mostra que agentes e modelos de linguagem, quando colocados em tarefas reais de engenharia de software, precisam lidar com contexto longo, múltiplos arquivos, ambiente de execução, verificação, segurança, manutenção e coordenação humano-IA.[^swebench] [^se-agents] Revisões sistemáticas sobre IA em IDEs também apontam ganhos de produtividade, mas alertam para **sobrecarga de verificação, risco de dependência excessiva, problemas de correção, manutenção e segurança**.[^hax-ide] Por isso, esta skill trata o agente como parte de um sistema de trabalho, não como uma caixa mágica de geração de código.
+
 > **Código não é software.** Software inclui requisitos, arquitetura, dados, fluxos de usuário, segurança, testes, deployment, observabilidade, manutenção e o processo que mantém tudo coerente ao longo do tempo.
 
 ## O que este pacote entrega
@@ -18,6 +20,7 @@ A tese é simples: **modelo bom não basta**. Aplicações reais não nascem ape
 | `checklists/` | Checklist de execução para uso em revisão ou antes de encerrar uma tarefa. |
 | `examples/` | Exemplo mínimo de aplicação da skill em uma tarefa real. |
 | `docs/` | Guia conceitual consolidado para humanos entenderem e adaptarem o método. |
+| `docs/academic-foundations.md` | Fundamentos acadêmicos e técnicos que dão lastro ao método: agentes LLM, benchmarks de software engineering, BDD, rastreabilidade, verificação, DevSecOps, SRE e colaboração humano-IA. |
 
 ## Por que isso existe
 
@@ -28,6 +31,28 @@ A pergunta relevante agora é outra: **a IA consegue ajudar a construir software
 A resposta depende menos do modelo e mais do harness ao redor dele.
 
 Sem harness, um agente tende a trabalhar como um dev novato largado numa base de código sem onboarding: ele pode ser rápido, mas não conhece contexto, histórico, arquitetura, riscos, critérios de aceite nem consequências. Com harness, o agente opera dentro de um canteiro: sabe o que construir, onde mexer, o que não tocar, como validar, quando pedir aprovação e como deixar rastros para a próxima sessão.
+
+## Base acadêmica e técnica
+
+A skill se apoia em sete pilares de literatura e prática técnica. O primeiro é a constatação, reforçada por benchmarks como **SWE-bench**, de que resolver issues reais de GitHub exige muito mais do que completar uma função isolada: exige compreender codebases, coordenar mudanças em múltiplos arquivos e interagir com ambientes de execução.[^swebench] O segundo é a pesquisa sobre agentes LLM para engenharia de software, que descreve o uso de planejamento, memória, ferramentas, execução iterativa e feedback como componentes essenciais para autonomia prática.[^se-agents] [^react]
+
+O terceiro pilar vem da engenharia de requisitos e da rastreabilidade: especificações, contratos, critérios de aceite e vínculos entre requisitos, implementação e testes reduzem ambiguidade e melhoram manutenção.[^traceability] O quarto pilar vem de BDD e especificação por comportamento, que sustentam a ideia de traduzir intenção de negócio em cenários verificáveis antes da implementação.[^bdd] O quinto pilar é verificação em tempo de execução e observabilidade, especialmente quando o comportamento não pode ser validado apenas por inspeção estática.[^runtime-verification] [^sre]
+
+O sexto pilar é DevSecOps: segurança precisa entrar no ciclo de desenvolvimento, operação, ferramentas e métricas, e não aparecer apenas como revisão tardia.[^devsecops] O sétimo é a pesquisa sobre colaboração humano-IA em IDEs, que recomenda transparência, explicabilidade, controle humano e auditoria de código gerado por IA para reduzir dependência excessiva e riscos de qualidade.[^hax-ide]
+
+| Pilar | Como aparece na skill |
+|---|---|
+| Benchmarks de software engineering real | O agente precisa tratar tarefas como mudanças em codebase, não como geração de snippet. |
+| Agentes LLM iterativos | O fluxo exige planejamento, execução, sensores, revisão e handoff. |
+| Engenharia de requisitos e rastreabilidade | `CONTRACT.md`, critérios de aceite, PRD e handoff conectam intenção, implementação e validação. |
+| BDD e comportamento verificável | `ACCEPTANCE_CRITERIA.md` e `SEMANTIC_SPEC.md` transformam intenção em comportamento observável. |
+| Runtime verification, SRE e observabilidade | Release, rollback, logs, métricas, replay e evidências operacionais entram como parte do pronto. |
+| DevSecOps | Mudanças com dados, autenticação, permissões, segredos e produção sobem o nível de rigor. |
+| Human-AI Experience | A skill preserva controle humano, transparência, revisão e auditoria do trabalho do agente. |
+
+Para uma leitura consolidada das fontes, veja [`docs/academic-foundations.md`](docs/academic-foundations.md).
+
+A skill também incorpora uma adaptação do padrão minimalista [`grill-me`](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md): entrevistar criticamente o plano até alcançar entendimento compartilhado. A adaptação aqui é mais operacional: o agente deve primeiro buscar respostas no codebase e nos documentos existentes; só depois deve perguntar ao usuário, uma decisão bloqueante por vez, sempre oferecendo uma resposta recomendada.
 
 ## Como usar rapidamente
 
@@ -126,6 +151,17 @@ python scripts/validate_skill.py
 
 A validação verifica a presença de frontmatter no `SKILL.md`, referências obrigatórias e templates essenciais.
 
+
+[^swebench]: Jimenez, C. E. et al. [SWE-bench: Can Language Models Resolve Real-World GitHub Issues?](https://arxiv.org/abs/2310.06770), ICLR 2024.
+[^se-agents]: Liu, J. et al. [A Survey on Large Language Model based Autonomous Agents for Software Engineering](https://arxiv.org/abs/2409.02977), ACM Transactions on Software Engineering and Methodology, 2025.
+[^react]: Yao, S. et al. [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629), 2022.
+[^traceability]: Nair, S. et al. [A survey on requirements traceability](https://doi.org/10.1007/s00766-016-0252-5), Requirements Engineering, 2017.
+[^bdd]: Binamungu, L. P., Embury, S. M. and Konstantinou, N. [Characterising the Quality of Behaviour Driven Development Specifications](https://pmc.ncbi.nlm.nih.gov/articles/PMC7251619/), 2020.
+[^runtime-verification]: D'Angelo, B. et al. [A survey of challenges for runtime verification from advanced application domains](https://doi.org/10.1007/s10703-019-00337-w), Formal Methods in System Design, 2019.
+[^sre]: Google. [Site Reliability Engineering](https://sre.google/sre-book/table-of-contents/), 2016.
+[^devsecops]: Zhao, X., Clear, T., Lal, R. [Identifying the primary dimensions of DevSecOps: A multi-vocal literature review](https://www.sciencedirect.com/science/article/pii/S0164121224001080), Journal of Systems and Software, 2024.
+[^hax-ide]: Sergeyuk, A. et al. [Human-AI Experience in Integrated Development Environments: A Systematic Literature Review](https://arxiv.org/abs/2503.06195), Empirical Software Engineering, 2026.
+
 ## Autor
 
 **André Almeida**
@@ -143,3 +179,5 @@ MIT. Consulte `LICENSE`.
 |---|---|---|
 | 2026-05-28 | 13:05 GMT-3 | Reorganização para repositório público portátil, separando skill principal, referências, templates, documentação humana e validação local. |
 | 2026-05-29 | 05:52 GMT-3 | Incorporação de camada de especificação semântica, referência a state-of-the-art review e template `SEMANTIC_SPEC.md` após análise de artigo sobre VibeCoding State-of-the-Art-Driven Development. |
+| 2026-05-29 | 06:00 GMT-3 | Inclusão de base acadêmica e técnica no storytelling inicial, conectando a skill a pesquisas sobre agentes LLM, SWE-bench, BDD, rastreabilidade, verificação, DevSecOps, SRE e colaboração humano-IA. |
+| 2026-05-29 | 06:05 GMT-3 | Inclusão de base acadêmica, documento `academic-foundations.md` e adaptação do padrão `grill-me` como `DECISION_GRILL.md`. |

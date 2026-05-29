@@ -65,6 +65,7 @@ The default is `solo`. Do not use `squad` just because it sounds impressive. Use
 6. **No silent scope creep.** Record extra work as follow-up. Do not implement outside the current task unless approved.
 7. **No unsafe production action.** Production, credentials, payments, destructive database operations and user data require explicit approval.
 8. **No untracked handoff.** Every meaningful run must leave enough state for another agent or human to continue.
+9. **No unnecessary interrogation.** If an answer can be obtained from the codebase, existing docs, tests, logs, schemas or Git history, inspect those sources before asking the user.
 
 ## Project files
 
@@ -79,6 +80,7 @@ AGENTS.md
 .harness/EVALUATION_REPORT.md
 .harness/HANDOFF.md
 .harness/OPEN_QUESTIONS.md
+.harness/DECISION_GRILL.md
 docs/product/PRODUCT_INTENT.md
 docs/product/PRD.md
 docs/product/METRICS_PLAN.md
@@ -98,10 +100,10 @@ Keep `AGENTS.md` short. It should point to the right docs, commands and constrai
 | `quick-fix` | final summary with verification; `.harness/HANDOFF.md` if state matters | `.harness/EVALUATION_REPORT.md` |
 | `feature` | `.harness/CONTRACT.md`, `.harness/ACCEPTANCE_CRITERIA.md`, `.harness/TEST_PLAN.md`, `.harness/HANDOFF.md` | `docs/product/PRD.md` |
 | `product-feature` | `docs/product/PRODUCT_INTENT.md`, `docs/product/PRD.md`, `.harness/CONTRACT.md`, `.harness/HANDOFF.md` | `.harness/SEMANTIC_SPEC.md`, `docs/product/METRICS_PLAN.md` |
-| `architecture` | `.harness/CONTRACT.md`, `.harness/SEMANTIC_SPEC.md`, `docs/architecture/ARCHITECTURE.md`, `docs/decisions/DECISION_LOG.md`, `.harness/HANDOFF.md` | `.harness/EVALUATION_REPORT.md` |
+| `architecture` | `.harness/CONTRACT.md`, `.harness/SEMANTIC_SPEC.md`, `docs/architecture/ARCHITECTURE.md`, `docs/decisions/DECISION_LOG.md`, `.harness/HANDOFF.md` | `.harness/DECISION_GRILL.md`, `.harness/EVALUATION_REPORT.md` |
 | `security-data` | `.harness/CONTRACT.md`, `.harness/ACCEPTANCE_CRITERIA.md`, `.harness/TEST_PLAN.md`, `.harness/EVALUATION_REPORT.md`, `.harness/HANDOFF.md` | `docs/decisions/DECISION_LOG.md` |
 | `release` | `docs/release/RELEASE_PLAN.md`, `.harness/EVALUATION_REPORT.md`, `.harness/HANDOFF.md` | `.harness/SEMANTIC_SPEC.md` when replay/auditability matters, `docs/product/POST_LAUNCH_REVIEW.md` |
-| `investigation` | `.harness/STATE.md`, `.harness/EVALUATION_REPORT.md` or investigation notes, `.harness/HANDOFF.md` | `.harness/OPEN_QUESTIONS.md` |
+| `investigation` | `.harness/STATE.md`, `.harness/EVALUATION_REPORT.md` or investigation notes, `.harness/HANDOFF.md` | `.harness/OPEN_QUESTIONS.md`, `.harness/DECISION_GRILL.md` |
 
 ## Workflow
 
@@ -140,6 +142,11 @@ For any feature with more than trivial scope, create or update the contract, acc
 
 The spec must distinguish confirmed facts, decisions, assumptions, open questions and out-of-scope items. Every meaningful requirement must have an ID, for example `BUS-001`, `USER-001`, `AUTH-001`, `DATA-001`, `UI-001`, `SEC-001`, `NFR-001`, `REL-001` or `MET-001`.
 
+### Phase 2.2: decision grill gate
+
+Use this gate when the plan, PRD, architecture, release path or semantic behavior has unresolved branches. Create `.harness/DECISION_GRILL.md` from `templates/DECISION_GRILL.md` when ambiguity could cause rework, unsafe implementation or misaligned expectations.
+
+The agent must walk the decision tree one dependency at a time. For each critical question, provide a recommended answer and confidence level. If the answer can be discovered by inspecting the codebase, documentation, tests, logs, schemas, configuration or Git history, inspect those sources instead of asking the user. Ask the user only when the missing answer blocks safe progress or requires a product/business decision.
 
 ### Phase 2.5: semantic specification gate
 
@@ -235,6 +242,8 @@ When using `review-pair`, the implementation agent must provide requirement IDs 
 
 The evaluation agent must not assume correctness from the implementation summary. It must verify against the contract and inspect changed files.
 
+For ambiguous plans, the reviewer may act as a critical interviewer: identify the weakest assumptions, walk the decision tree, answer codebase-discoverable questions directly and ask only one blocking user question at a time.
+
 ## Definition of done
 
 A task is done only when product intent is clear enough for the current scope, spec or contract exists when needed, all acceptance criteria for the task were addressed, relevant sensors were executed, failures were fixed or explicitly recorded, no user changes were overwritten, no test was weakened without approval, state and handoff were updated, and release and measurement plan exist when users are affected.
@@ -272,3 +281,4 @@ Next action
 |---|---|---|
 | 2026-05-28 | 13:00 GMT-3 | Reworked as a portable skill for any AI coding agent, added YAML frontmatter, activation heuristics, artifact matrix, review-pair handoff and stronger verification rules. |
 | 2026-05-29 | 05:50 GMT-3 | Added semantic specification gate, state-of-the-art review guidance, replay/auditability checks and semantic-system classification inspired by VibeCoding state-of-the-art-driven development. |
+| 2026-05-29 | 06:05 GMT-3 | Added decision grill gate and no-unnecessary-interrogation rule inspired by the `grill-me` critical interview pattern. |

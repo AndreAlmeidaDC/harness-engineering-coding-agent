@@ -8,6 +8,8 @@ O Harness Engineering Coding Agent é uma skill operacional para orientar agente
 
 A skill foi desenhada para ser portátil. Ela pode ser usada por qualquer agente que consiga ler arquivos, editar código, executar comandos e registrar estado. Isso inclui agentes em IDEs, CLIs, ambientes autônomos, agentes internos de empresas e combinações multiagente.
 
+A justificativa do método é prática, mas também acadêmica. Benchmarks de engenharia de software real mostram que modelos precisam compreender issues, navegar codebases extensas, coordenar alterações entre arquivos e validar mudanças em ambiente de execução.[^swebench] Revisões sobre IA em IDEs indicam ganhos de produtividade, mas também registram riscos de **verificação insuficiente, dependência excessiva, manutenção, correção e segurança**.[^hax-ide] A skill existe para responder exatamente a esse ponto: transformar agentes de coding em participantes de um processo verificável, e não em geradores isolados de código.
+
 > **Código não é software.** Software é um sistema sociotécnico que envolve intenção de produto, arquitetura, dados, segurança, testes, release, observabilidade, operação e evolução contínua.
 
 ## O problema que a skill resolve
@@ -15,6 +17,28 @@ A skill foi desenhada para ser portátil. Ela pode ser usada por qualquer agente
 Agentes de coding tendem a ser muito bons em tarefas localizadas, mas podem falhar em tarefas reais quando recebem contexto insuficiente, objetivos vagos ou ausência de critérios objetivos de validação. O resultado costuma ser uma entrega que compila, parece funcionar em uma demonstração local, mas não está pronta para produção, manutenção ou evolução.
 
 O harness resolve esse problema criando um conjunto de gates. Antes de codar, o agente entende a intenção. Antes de alterar estrutura, entende o contrato. Antes de declarar sucesso, roda sensores. Antes de lançar, planeja rollback e observabilidade. Antes de encerrar, deixa handoff.
+
+## Fundamentos acadêmicos e técnicos
+
+A skill consolida sete linhas de evidência. Ela usa **SWE-bench** como alerta central: tarefas reais de software exigem raciocínio sobre issues, contexto de repositório, múltiplos arquivos e execução, não apenas geração de código em isolamento.[^swebench] Ela usa a literatura sobre agentes LLM para engenharia de software para justificar loops de planejamento, uso de ferramentas, feedback, memória e execução iterativa.[^se-agents] [^react]
+
+Da engenharia de requisitos, a skill herda a necessidade de rastrear intenção, requisito, decisão, implementação, teste e handoff.[^traceability] De BDD e especificação comportamental, herda a prática de converter intenção de negócio em comportamento observável e validável antes do código.[^bdd] De runtime verification, SRE e observabilidade, herda a noção de que sistemas em produção precisam de sinais, invariantes, evidência, rollback e aprendizado operacional.[^runtime-verification] [^sre]
+
+A camada de segurança é sustentada por DevSecOps, especialmente pela integração de práticas, ferramentas e métricas de segurança ao ciclo de desenvolvimento e operação.[^devsecops] A camada humano-IA é sustentada por revisões de Human-AI Experience em IDEs, que recomendam transparência, explicabilidade, controle do usuário e auditoria para mitigar riscos de qualidade e dependência excessiva.[^hax-ide]
+
+| Fundamento | Tradução operacional na skill |
+|---|---|
+| SWE-bench e benchmarks de issues reais | O agente deve tratar a tarefa como alteração verificável em codebase, com ambiente e regressão. |
+| Agentes LLM para engenharia de software | O fluxo usa planejamento, ferramentas, sensores, memória de estado e handoff. |
+| Engenharia de requisitos e rastreabilidade | PRD, contrato, critérios de aceite, plano de teste e relatório de avaliação conectam intenção a evidência. |
+| BDD e especificação comportamental | Behavior contracts e semantic specs tornam comportamento explícito antes da implementação. |
+| Runtime verification, SRE e observabilidade | Release exige sinais, rollback, logs, métricas, replay quando necessário e evidência pós-lançamento. |
+| DevSecOps | Mudanças sensíveis sobem o rigor de validação, revisão e aprovação. |
+| Human-AI Experience | A skill preserva controle humano, reduz opacidade e exige auditoria do resultado gerado por IA. |
+
+A versão consolidada dessas referências está em [`academic-foundations.md`](academic-foundations.md).
+
+Além da base acadêmica, a skill incorpora como inspiração operacional a skill pública [`grill-me`](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md), que propõe entrevistar criticamente o usuário sobre um plano ou design até alcançar entendimento compartilhado. Na adaptação do Harness Engineering Coding Agent, essa ideia vira um gate mais disciplinado: o agente deve primeiro investigar o que o codebase já responde, depois registrar perguntas críticas em `DECISION_GRILL.md` e perguntar ao usuário apenas o que realmente bloqueia avanço seguro.
 
 ## Arquitetura do pacote
 
@@ -93,9 +117,22 @@ A skill exige handoff em todo trabalho significativo. O handoff deve permitir qu
 
 Em agentes baseados em diretório de skills, copie o diretório inteiro da skill. Em agentes que usam regras, copie o conteúdo de `SKILL.md` como regra principal e mantenha `references/` e `templates/` acessíveis. Em agentes internos, trate `SKILL.md` como política de execução e os demais arquivos como módulos lidos sob demanda.
 
+
+[^swebench]: Jimenez, C. E. et al. [SWE-bench: Can Language Models Resolve Real-World GitHub Issues?](https://arxiv.org/abs/2310.06770), ICLR 2024.
+[^se-agents]: Liu, J. et al. [A Survey on Large Language Model based Autonomous Agents for Software Engineering](https://arxiv.org/abs/2409.02977), ACM Transactions on Software Engineering and Methodology, 2025.
+[^react]: Yao, S. et al. [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629), 2022.
+[^traceability]: Nair, S. et al. [A survey on requirements traceability](https://doi.org/10.1007/s00766-016-0252-5), Requirements Engineering, 2017.
+[^bdd]: Binamungu, L. P., Embury, S. M. and Konstantinou, N. [Characterising the Quality of Behaviour Driven Development Specifications](https://pmc.ncbi.nlm.nih.gov/articles/PMC7251619/), 2020.
+[^runtime-verification]: D'Angelo, B. et al. [A survey of challenges for runtime verification from advanced application domains](https://doi.org/10.1007/s10703-019-00337-w), Formal Methods in System Design, 2019.
+[^sre]: Google. [Site Reliability Engineering](https://sre.google/sre-book/table-of-contents/), 2016.
+[^devsecops]: Zhao, X., Clear, T., Lal, R. [Identifying the primary dimensions of DevSecOps: A multi-vocal literature review](https://www.sciencedirect.com/science/article/pii/S0164121224001080), Journal of Systems and Software, 2024.
+[^hax-ide]: Sergeyuk, A. et al. [Human-AI Experience in Integrated Development Environments: A Systematic Literature Review](https://arxiv.org/abs/2503.06195), Empirical Software Engineering, 2026.
+
 ## Histórico de alterações
 
 | Data | Hora | Motivo |
 |---|---|---|
 | 2026-05-28 | 13:18 GMT-3 | Atualização do guia para refletir a estrutura portátil, removendo dependência de subskills instaláveis e explicando o uso por qualquer agente de coding. |
 | 2026-05-29 | 05:54 GMT-3 | Added semantic specification section, connecting VibeCoding state-of-the-art-driven development concepts to portable behavior contracts and proportional architecture review. |
+| 2026-05-29 | 06:00 GMT-3 | Inclusão de seção de fundamentos acadêmicos e técnicos na introdução, conectando o storytelling da skill a benchmarks, literatura de agentes LLM, BDD, rastreabilidade, verificação, DevSecOps, SRE e Human-AI Experience. |
+| 2026-05-29 | 06:05 GMT-3 | Inclusão de fundamentos acadêmicos consolidados e adaptação do padrão `grill-me` como decision grill para crítica de planos e designs. |

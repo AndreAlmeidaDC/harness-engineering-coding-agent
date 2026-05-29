@@ -43,9 +43,17 @@ Load this file when the task is a `product-feature`, when the user request conta
 - What signals of adoption should be tracked?
 - What experiment or validation loop is needed?
 
+## Critical interview protocol
+
+When intent is unclear, the agent should stress-test the plan before drafting PRD or writing code. It must walk the decision tree one dependency at a time and provide a recommended answer for each critical question.
+
+The agent should not ask the user questions that can be answered by reading the codebase, existing documentation, analytics notes, tests, schemas, configuration or repository history. It should ask the user only when the answer requires business judgment, strategic trade-off, prioritization or approval.
+
+Use `.harness/DECISION_GRILL.md` when the plan contains multiple unresolved branches or when wrong assumptions would create meaningful rework.
+
 ## Rules
 
-Do not invent missing business facts as truth. Label assumptions explicitly. Separate user need from proposed solution. Keep the MVP small. Define measurement before implementation.
+Do not invent missing business facts as truth. Label assumptions explicitly. Separate user need from proposed solution. Keep the MVP small. Define measurement before implementation. Ask one blocking question at a time, and pair it with the agent's recommended answer.
 
 ## Output standard
 
@@ -56,3 +64,4 @@ The final product intent must separate confirmed facts, assumptions, decisions, 
 | Date | Time | Reason |
 |---|---|---|
 | 2026-05-28 | 13:08 GMT-3 | Converted from subskill to portable reference module and clarified when to load it. |
+| 2026-05-29 | 06:05 GMT-3 | Added critical interview protocol and decision grill artifact for product ambiguity. |
