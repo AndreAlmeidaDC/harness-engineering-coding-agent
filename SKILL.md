@@ -25,6 +25,18 @@ If the user asks to build, modify, debug, refactor, test, release or evaluate so
 
 Use the full workflow only when the task has product ambiguity, user impact, production impact, user data, auth, integrations, release risk, security risk or multi-session complexity.
 
+## Origin version check
+
+At the start of a meaningful use, when internet access and Git or HTTP tooling are available, check whether this skill has a newer upstream version before changing the target project. The canonical source is:
+
+```text
+https://github.com/AndreAlmeidaDC/harness-engineering-coding-agent
+```
+
+Read the upstream `README.md` and compare the local copy against the upstream default branch using the lightest available method, such as `git fetch`, `git ls-remote`, direct raw file retrieval or repository metadata. If there are relevant differences, summarize what changed, identify potential impact on the current task and ask the user whether to update the local skill package before proceeding.
+
+Never perform silent self-update. Never overwrite local edits without explicit user approval. If network access is unavailable, the repository cannot be reached or the task is too small to justify the check, continue with the local version and record the limitation in the final handoff when relevant. For the detailed protocol, read `references/version-check.md`.
+
 ## When to use
 
 Use this skill when the task involves any of the following:
@@ -66,6 +78,17 @@ The default is `solo`. Do not use `squad` just because it sounds impressive. Use
 7. **No unsafe production action.** Production, credentials, payments, destructive database operations and user data require explicit approval.
 8. **No untracked handoff.** Every meaningful run must leave enough state for another agent or human to continue.
 9. **No unnecessary interrogation.** If an answer can be obtained from the codebase, existing docs, tests, logs, schemas or Git history, inspect those sources before asking the user.
+
+## Coding hygiene rules
+
+Keep implementation disciplined even when the task is small. These rules are intentionally lightweight and do not create an additional gate.
+
+| Rule | Meaning | Practical check |
+|---|---|---|
+| **Think before coding** | Understand the intent, existing behavior and likely blast radius before editing. | Can the agent explain what it is about to change and why? |
+| **Simplicity first** | Prefer the smallest design that satisfies the current contract. | Is there an easier solution with fewer moving parts? |
+| **Surgical changes** | Every changed line should connect directly to the requested task or an approved prerequisite. | Did any line change outside the original scope? |
+| **Verify every step** | Treat each slice as incomplete until a relevant sensor or explicit manual check has run. | What command, test, review or evidence proved this step? |
 
 ## Project files
 
@@ -267,6 +290,7 @@ Verification
 
 Risks
 - Known risks or assumptions
+- Scope check: did any changed line fall outside the original user-approved scope?
 
 Files changed
 - List
@@ -282,3 +306,4 @@ Next action
 | 2026-05-28 | 13:00 GMT-3 | Reworked as a portable skill for any AI coding agent, added YAML frontmatter, activation heuristics, artifact matrix, review-pair handoff and stronger verification rules. |
 | 2026-05-29 | 05:50 GMT-3 | Added semantic specification gate, state-of-the-art review guidance, replay/auditability checks and semantic-system classification inspired by VibeCoding state-of-the-art-driven development. |
 | 2026-05-29 | 06:05 GMT-3 | Added decision grill gate and no-unnecessary-interrogation rule inspired by the `grill-me` critical interview pattern. |
+| 2026-06-01 | 18:45 GMT-3 | Added lightweight coding hygiene rules and an origin version check protocol with explicit user consent before any skill update. |

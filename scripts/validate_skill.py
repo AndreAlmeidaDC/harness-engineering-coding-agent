@@ -8,6 +8,7 @@ required_files = [
     "references/product-engineering-discovery.md",
     "references/prd-specification-builder.md",
     "references/semantic-system-design.md",
+    "references/version-check.md",
     "references/release-measurement-loop.md",
     "references/squad-mode.md",
     "docs/academic-foundations.md",

@@ -48,6 +48,7 @@ Além da base acadêmica, a skill incorpora como inspiração operacional a skil
 | `references/product-engineering-discovery.md` | Ajuda o agente a transformar uma ideia vaga em intenção de produto validável. |
 | `references/prd-specification-builder.md` | Converte intenção em PRD, contrato, requisitos, critérios de aceite e plano de teste. |
 | `references/release-measurement-loop.md` | Organiza rollout, rollback, observabilidade, métricas e revisão pós-lançamento. |
+| `references/version-check.md` | Define o protocolo de checagem da versão upstream, leitura do README público e consentimento antes de atualizar a skill local. |
 | `references/squad-mode.md` | Define quando separar papéis e como coordenar um squad multiagente. |
 | `templates/` | Modelos reutilizáveis para gerar artefatos no projeto-alvo. |
 | `checklists/` | Lista prática para revisar a execução antes de encerrar a tarefa. |
@@ -113,6 +114,12 @@ Sensores inferenciais são úteis, mas não substituem sensores determinísticos
 
 A skill exige handoff em todo trabalho significativo. O handoff deve permitir que outra pessoa ou outro agente continue sem reconstruir a sessão mental anterior. Um bom handoff informa estado atual, o que mudou, comandos executados, arquivos alterados, riscos, pendências e próxima ação recomendada.
 
+## Higiene de coding e atualização da própria skill
+
+A evolução mais recente reforça duas disciplinas pequenas, mas importantes. A primeira é a higiene de coding: antes de editar, o agente deve pensar no objetivo e no raio de impacto; durante a implementação, deve escolher a solução mais simples suficiente; ao alterar arquivos, deve manter mudanças cirúrgicas; e antes de encerrar, deve verificar cada etapa com evidência objetiva ou registrar claramente a lacuna.
+
+A segunda é a verificação de origem da própria skill. Em tarefas significativas, se houver acesso à internet, o agente pode consultar o repositório público, ler o `README.md`, comparar a cópia local e avisar o usuário quando houver mudança relevante. Essa rotina preserva controle humano: o agente pergunta antes de atualizar e nunca substitui a versão local em silêncio.
+
 ## Como adaptar em ferramentas diferentes
 
 Em agentes baseados em diretório de skills, copie o diretório inteiro da skill. Em agentes que usam regras, copie o conteúdo de `SKILL.md` como regra principal e mantenha `references/` e `templates/` acessíveis. Em agentes internos, trate `SKILL.md` como política de execução e os demais arquivos como módulos lidos sob demanda.
@@ -136,3 +143,4 @@ Em agentes baseados em diretório de skills, copie o diretório inteiro da skill
 | 2026-05-29 | 05:54 GMT-3 | Added semantic specification section, connecting VibeCoding state-of-the-art-driven development concepts to portable behavior contracts and proportional architecture review. |
 | 2026-05-29 | 06:00 GMT-3 | Inclusão de seção de fundamentos acadêmicos e técnicos na introdução, conectando o storytelling da skill a benchmarks, literatura de agentes LLM, BDD, rastreabilidade, verificação, DevSecOps, SRE e Human-AI Experience. |
 | 2026-05-29 | 06:05 GMT-3 | Inclusão de fundamentos acadêmicos consolidados e adaptação do padrão `grill-me` como decision grill para crítica de planos e designs. |
+| 2026-06-01 | 18:45 GMT-3 | Inclusão de seção sobre higiene de coding e verificação da versão upstream da skill com consentimento explícito antes de atualização. |

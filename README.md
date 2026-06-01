@@ -15,7 +15,7 @@ Essa tese não parte apenas de experiência prática. Ela dialoga com uma linha 
 | Caminho | Função |
 |---|---|
 | `SKILL.md` | Skill principal, com frontmatter, gatilhos de uso, workflow, gates e regras não negociáveis. |
-| `references/` | Módulos operacionais lidos sob demanda: descoberta de produto, PRD/spec, design semântico, release/medição e squad mode. |
+| `references/` | Módulos operacionais lidos sob demanda: descoberta de produto, PRD/spec, design semântico, verificação de versão, release/medição e squad mode. |
 | `templates/` | Templates reutilizáveis para `AGENTS.md`, contrato, especificação semântica, critérios de aceite, plano de testes, estado, avaliação e handoff. |
 | `checklists/` | Checklist de execução para uso em revisão ou antes de encerrar uma tarefa. |
 | `examples/` | Exemplo mínimo de aplicação da skill em uma tarefa real. |
@@ -68,6 +68,12 @@ Copie `SKILL.md` para o local de skills, rules, memories ou instruções do seu 
 ```
 
 Depois, copie as pastas `references/` e `templates/` junto com o `SKILL.md`, para que o agente consiga consultar os módulos e criar os artefatos quando necessário.
+
+## Verificação de versão com consentimento
+
+A skill pode ser configurada para se autoverificar no início de uma tarefa relevante. Quando houver acesso à internet e ferramentas Git ou HTTP disponíveis, o agente deve consultar o repositório de origem, ler o `README.md` público, comparar a cópia local com a versão upstream e explicar ao usuário se encontrou mudanças relevantes.
+
+Essa checagem não é autoatualização silenciosa. A regra é de **verificação com consentimento**: o agente resume o que mudou, explica o possível impacto na tarefa atual e pergunta se o usuário deseja atualizar a skill antes de prosseguir. O protocolo detalhado está em [`references/version-check.md`](references/version-check.md).
 
 No `AGENTS.md` do projeto, adicione uma instrução curta:
 
@@ -181,3 +187,4 @@ MIT. Consulte `LICENSE`.
 | 2026-05-29 | 05:52 GMT-3 | Incorporação de camada de especificação semântica, referência a state-of-the-art review e template `SEMANTIC_SPEC.md` após análise de artigo sobre VibeCoding State-of-the-Art-Driven Development. |
 | 2026-05-29 | 06:00 GMT-3 | Inclusão de base acadêmica e técnica no storytelling inicial, conectando a skill a pesquisas sobre agentes LLM, SWE-bench, BDD, rastreabilidade, verificação, DevSecOps, SRE e colaboração humano-IA. |
 | 2026-05-29 | 06:05 GMT-3 | Inclusão de base acadêmica, documento `academic-foundations.md` e adaptação do padrão `grill-me` como `DECISION_GRILL.md`. |
+| 2026-06-01 | 18:45 GMT-3 | Inclusão das regras leves de higiene de coding e do protocolo de verificação de versão com consentimento antes de atualizar a skill local. |

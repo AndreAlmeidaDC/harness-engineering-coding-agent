@@ -48,6 +48,7 @@ Verification
 
 Risks
 - Provider rate limits were not verified.
+- Scope check: no changed line fell outside the original password-reset request and required auth verification artifacts.
 
 Files changed
 - src/auth/reset-password.tsx
@@ -67,3 +68,4 @@ Next action
 | Date | Time | Reason |
 |---|---|---|
 | 2026-05-28 | 13:22 GMT-3 | Updated example to show portable agent behavior and security-aware acceptance criteria. |
+| 2026-06-01 | 18:45 GMT-3 | Updated final response example with explicit surgical-change scope check. |
