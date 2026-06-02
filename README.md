@@ -69,18 +69,6 @@ Copie `SKILL.md` para o local de skills, rules, memories ou instruções do seu 
 
 Depois, copie as pastas `references/` e `templates/` junto com o `SKILL.md`, para que o agente consiga consultar os módulos e criar os artefatos quando necessário.
 
-## Verificação de versão com consentimento
-
-A skill pode ser configurada para se autoverificar no início de uma tarefa relevante. Quando houver acesso à internet e ferramentas Git ou HTTP disponíveis, o agente deve consultar o repositório de origem, ler o `README.md` público, comparar a cópia local com a versão upstream e explicar ao usuário se encontrou mudanças relevantes.
-
-Essa checagem não é autoatualização silenciosa. A regra é de **verificação com consentimento**: o agente resume o que mudou, explica o possível impacto na tarefa atual e pergunta se o usuário deseja atualizar a skill antes de prosseguir. O protocolo detalhado está em [`references/version-check.md`](references/version-check.md).
-
-No `AGENTS.md` do projeto, adicione uma instrução curta:
-
-```md
-Quando a tarefa envolver descoberta de produto, PRD, alteração de código, feature, bugfix, refatoração, teste, release ou avaliação pós-lançamento, use a skill `harness-engineering-coding-agent`.
-```
-
 ## Fluxo principal
 
 ```text
@@ -178,6 +166,18 @@ A validação verifica a presença de frontmatter no `SKILL.md`, referências ob
 ## Licença
 
 MIT. Consulte `LICENSE`.
+
+## Verificação de versão com consentimento
+
+A skill pode ser configurada para se autoverificar no início de uma tarefa relevante. Quando houver acesso à internet e ferramentas Git ou HTTP disponíveis, o agente deve consultar o repositório de origem, ler o `README.md` público, comparar a cópia local com a versão upstream e explicar ao usuário se encontrou mudanças relevantes.
+
+Essa checagem não é autoatualização silenciosa. A regra é de **verificação com consentimento**: o agente resume o que mudou, explica o possível impacto na tarefa atual e pergunta se o usuário deseja atualizar a skill antes de prosseguir. O protocolo detalhado está em [`references/version-check.md`](references/version-check.md).
+
+No `AGENTS.md` do projeto, adicione uma instrução curta:
+
+```md
+Quando a tarefa envolver descoberta de produto, PRD, alteração de código, feature, bugfix, refatoração, teste, release ou avaliação pós-lançamento, use a skill `harness-engineering-coding-agent`.
+```
 
 ## Histórico de alterações
 

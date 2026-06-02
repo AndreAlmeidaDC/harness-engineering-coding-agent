@@ -1,12 +1,10 @@
-# Origin Version Check Protocol
+# Version check protocol
 
-Autor: **André Almeida**
+This reference defines how the skill checks its upstream source before meaningful use. It exists to keep local skill copies current without allowing silent or unsafe self-update.
 
 ## Purpose
 
-This protocol lets a coding agent verify whether the local copy of the Harness Engineering Coding Agent skill is behind the public upstream repository before the agent relies on outdated operating instructions.
-
-The protocol is intentionally conservative. It is a **check-and-consent** workflow, not an automatic updater. The agent may discover that a newer version exists, read the upstream documentation and explain the difference, but it must not change the local skill package unless the user explicitly approves the update.
+The skill may check whether a newer upstream version exists, read the public documentation, summarize the relevant changes and ask the user whether to update. The skill must never update itself silently.
 
 ## Canonical source
 
@@ -14,65 +12,51 @@ The protocol is intentionally conservative. It is a **check-and-consent** workfl
 https://github.com/AndreAlmeidaDC/harness-engineering-coding-agent
 ```
 
-When possible, inspect the upstream default branch and read the upstream `README.md` before deciding whether an update is relevant.
+## Required behavior
 
-## When to run
+At the start of a meaningful use, when internet access and Git or HTTP tooling are available, the agent should perform the lightest safe check:
 
-Run this check at the start of a meaningful task that will use this skill for product discovery, specification, implementation, architecture, security, release or evaluation work. The check may be skipped when the task is trivial, network access is unavailable, the host agent has no Git or HTTP capability, the user has explicitly asked to work offline, or the check would materially interrupt an urgent production incident.
+1. Identify the local skill directory and read `metadata.json` when present.
+2. Consult the upstream repository default branch.
+3. Read upstream `README.md` and `CHANGELOG.md` when available.
+4. Compare local and upstream versions using commit hash, release tag, changelog entry or file diff.
+5. Summarize relevant changes in plain language.
+6. Explain whether the changes may affect the current task.
+7. Ask the user whether to update the local skill package before proceeding.
 
-If skipped for a meaningful task, mention the reason in the final handoff when it matters for auditability.
+## Consent rule
 
-## Minimum check
+The agent must not overwrite local files, run update scripts, pull changes, reset branches, delete files or change the local skill package without explicit user approval.
 
-Use the lightest available method for the current environment. Suitable options include:
+A safe update question looks like this:
 
-| Method | Use when | Expected evidence |
+> Encontrei uma versão mais nova desta skill no repositório de origem. As principais mudanças são: [resumo]. Isso pode impactar a tarefa atual porque [impacto]. Você quer que eu atualize a cópia local da skill antes de continuar?
+
+## Local changes rule
+
+If the local skill directory has uncommitted changes, local-only files or a dirty working tree, the agent must report that before any update and ask for guidance. It must never discard local changes silently.
+
+## Failure modes
+
+If the repository cannot be reached, network access is unavailable, Git is unavailable, rate limits block the check or the task is too small to justify the check, the agent may continue using the local version. When relevant, it should mention the limitation in the final response or handoff.
+
+## Recommended check methods
+
+Use the smallest method available for the environment:
+
+| Method | When to use | Notes |
 |---|---|---|
-| `git fetch` plus `git log` or `git diff` | The local skill is inside a Git clone of the upstream repository. | Local commit, upstream commit and a short summary of changed files. |
-| `git ls-remote` | The agent can call Git but the local package is not a clone. | Latest upstream commit hash and comparison with recorded local version if available. |
-| Raw README retrieval | Git is unavailable but HTTP is available. | Upstream README content, visible version notes or documented changes. |
-| Repository page inspection | Only browser-like access is available. | Human-readable summary of README, commits, releases or visible change notes. |
+| `git fetch` + comparison | Local copy is a Git clone. | Prefer non-destructive fetch; never reset without consent. |
+| `git ls-remote` | Need only remote commit hash. | Safe and lightweight. |
+| Raw file retrieval | Need to read README/CHANGELOG without clone. | Use public raw URLs where possible. |
+| Repository metadata | Need release or tag information. | Useful when GitHub CLI/API is available. |
 
-The agent should prefer deterministic comparison when possible. If only a rough comparison is possible, state that clearly.
+## Update scope
 
-## Decision protocol
-
-After checking upstream, classify the result as one of the following:
-
-| Result | Agent behavior |
-|---|---|
-| No visible upstream difference | Continue with the local skill and mention the checked source only if relevant. |
-| Upstream changed but impact appears unrelated | Summarize briefly and continue unless the user wants to update. |
-| Upstream changed and may affect current task | Pause before implementation, summarize the difference and ask whether to update. |
-| Local copy has uncommitted or user-specific edits | Do not overwrite. Explain the conflict and ask whether to merge, inspect manually or continue local. |
-| Upstream cannot be reached | Continue with local version and record the limitation when relevant. |
-
-## Consent requirement
-
-Before applying any update, ask the user a direct question in plain language:
-
-> I found a newer upstream version of the Harness Engineering Coding Agent skill. The main changes are: `[summary]`. Do you want me to update the local skill package before continuing?
-
-Only proceed with the update after the user approves. If the user declines, continue with the local version and avoid asking again during the same task unless the user requests it.
-
-## Safe update behavior
-
-When the user approves an update, preserve local changes first. The agent must inspect `git status` or the equivalent, avoid overwriting user edits, and prefer a reversible path such as committing current work, creating a branch, creating a backup copy or applying a reviewed patch.
-
-The update should be followed by local validation if the package provides validation commands. For this repository, run:
-
-```bash
-python scripts/validate_skill.py
-```
-
-If validation fails, stop, report the failure and do not claim the skill was updated successfully.
-
-## Anti-patterns
-
-Do not silently update the skill. Do not replace a local customized skill with upstream content without approval. Do not block urgent work solely because the upstream repository is unavailable. Do not treat a README difference as proof that every local file must be overwritten. Do not hide uncertainty about whether the local copy is current.
+When the user approves an update, update only the skill package and its support files. Do not modify the user's target project as part of the skill update unless the user separately approves that work.
 
 ## Change history
 
 | Date | Time | Reason |
 |---|---|---|
-| 2026-06-01 | 18:45 GMT-3 | Created protocol for upstream version verification, README review, difference summary and explicit user consent before updating the local skill package. |
+| 2026-06-02 | 09:02 GMT-3 | Added a shared origin version check protocol requiring upstream comparison, summary of changes and explicit user consent before local skill updates. |
