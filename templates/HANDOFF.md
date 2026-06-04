@@ -4,6 +4,17 @@
 
 ## Current state
 
+## Continuity details
+
+| Field | Value |
+|---|---|
+| Approved scope |  |
+| Current invariant |  |
+| Last verified state |  |
+| Evidence links |  |
+| Coordination notes |  |
+| Unsafe pending actions |  |
+
 ## What changed
 
 ## Commands run
@@ -31,4 +42,5 @@ Did any changed line fall outside the original user-approved scope?
 
 | Date | Time | Reason |
 |---|---|---|
+| 2026-06-04 | 12:17 GMT-3 | Added continuity details for approved scope, invariants, last verified state, evidence, coordination and unsafe pending actions. |
 | 2026-06-01 | 18:45 GMT-3 | Added explicit scope check for surgical-change verification during evaluation and handoff. |

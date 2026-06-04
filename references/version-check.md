@@ -36,6 +36,12 @@ A safe update question looks like this:
 
 If the local skill directory has uncommitted changes, local-only files or a dirty working tree, the agent must report that before any update and ask for guidance. It must never discard local changes silently.
 
+## Regression-free harness improvement rule
+
+Treat the skill and its support files as an operational harness. Before recommending or applying an approved update, assess whether the upstream change preserves or improves traceability, explicit consent, verification quality, safety boundaries and handoff continuity.
+
+Flag any update as risky when it removes gates, weakens sensors, reduces transparency, expands autonomy, changes update behavior, or makes handoff less complete. Risky updates require an explicit user decision after the risk is explained in plain language.
+
 ## Failure modes
 
 If the repository cannot be reached, network access is unavailable, Git is unavailable, rate limits block the check or the task is too small to justify the check, the agent may continue using the local version. When relevant, it should mention the limitation in the final response or handoff.
@@ -59,4 +65,5 @@ When the user approves an update, update only the skill package and its support 
 
 | Date | Time | Reason |
 |---|---|---|
+| 2026-06-04 | 12:17 GMT-3 | Added regression-free harness improvement rule for update recommendations and approved self-updates. |
 | 2026-06-02 | 09:02 GMT-3 | Added a shared origin version check protocol requiring upstream comparison, summary of changes and explicit user consent before local skill updates. |

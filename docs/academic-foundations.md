@@ -16,6 +16,7 @@ The central claim is modest and operational: **AI coding agents perform better a
 |---|---|---|---|
 | Real-world coding is not snippet completion | Benchmarks based on GitHub issues show that real software tasks require repository understanding, multi-file edits, environment execution and test feedback. | The skill requires context loading, Git safety, task breakdown, sensors, evaluation reports and handoff. | SWE-bench [^swebench] |
 | LLM agents need tools, planning and feedback | Surveys on LLM-based agents for software engineering describe agents as systems that combine planning, memory, tool use, perception, action and interaction. | The workflow is organized as classify, specify, load context, modify, verify, evaluate and hand off. | Liu et al. [^liu-se-agents], Jin et al. [^jin-agents], ReAct [^react], Reflexion [^reflexion] |
+| Code can serve as an agent harness | Agentic systems increasingly use code not only as final output, but as infrastructure for reasoning, tool use, memory, environment modeling, verification and shared artifacts. | The skill treats coding work as an operational harness of intent, specification, context, sensors, release discipline, observability, update consent and handoff. | Ning et al. [^code-as-harness] |
 | Human oversight remains necessary | Human-AI development environments can improve productivity, but introduce risks of over-reliance, verification burden, correctness issues, maintenance concerns and security problems. | The skill uses explicit acceptance criteria, review-pair mode, evaluation reports, approval gates and transparent handoff. | Sergeyuk et al. [^hax-ide] |
 | Requirements must be traceable | Requirements traceability links intent, decisions, implementation and validation, reducing ambiguity and improving maintainability. | Requirement IDs, `CONTRACT.md`, `PRD.md`, `DECISION_LOG.md`, `TEST_PLAN.md` and `EVALUATION_REPORT.md` preserve traceability. | Ramesh et al. [^ramesh-traceability] |
 | Behavior should be specified before implementation | BDD uses structured natural language to make behavior understandable by stakeholders and executable or verifiable against software. | `ACCEPTANCE_CRITERIA.md`, behavior contracts and `SEMANTIC_SPEC.md` convert intent into observable behavior. | Binamungu et al. [^bdd-quality] |
@@ -34,6 +35,7 @@ The skill deliberately avoids presenting coding agents as autonomous developers 
 | Semantic specification gate | Makes behavior, state, guarantees, constraints and replay/audit needs explicit before architecture hardens. |
 | Context loading gate | Reduces irrelevant context while forcing the agent to inspect the codebase where facts already exist. |
 | Feedback sensors | Separates deterministic verification from inferential critique. |
+| Harness telemetry | Records context used, gate decisions, sensor effectiveness, blind spots and improvement candidates so the harness can improve without silent regression. |
 | Review-pair and squad modes | Reduces self-confirmation by separating implementation and evaluation roles. |
 | Release gate | Connects code change to production blast radius, rollback, observability and ownership. |
 | Handoff | Preserves traceability and continuity across humans, sessions and agents. |
@@ -62,6 +64,7 @@ A credible evaluation could select 20 to 50 real GitHub issues across different 
 | Regression count | Captures hidden damage introduced by the agent. |
 | Clarification count | Measures whether the agent asks only useful blocking questions. |
 | Handoff quality | Measures continuity across sessions and agents. |
+| Harness telemetry completeness | Measures whether context, gate decisions, sensor effectiveness, blind spots and improvement candidates were recorded. |
 | Reviewer intervention effort | Measures whether the harness reduces or increases human burden. |
 | Security and data handling issues | Measures whether safety gates catch sensitive risks. |
 
@@ -73,6 +76,7 @@ A credible evaluation could select 20 to 50 real GitHub issues across different 
 [^react]: Yao, S. et al. [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629), 2022.
 [^reflexion]: Shinn, N. et al. [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366), NeurIPS 2023.
 [^hax-ide]: Sergeyuk, A. et al. [Human-AI Experience in Integrated Development Environments: A Systematic Literature Review](https://arxiv.org/abs/2503.06195), Empirical Software Engineering, 2026.
+[^code-as-harness]: Ning et al. [Code as Agent Harness](https://arxiv.org/abs/2605.18747), arXiv, 2026.
 [^ramesh-traceability]: Ramesh, B. and Jarke, M. [Toward Reference Models for Requirements Traceability](https://doi.org/10.1109/32.605760), IEEE Transactions on Software Engineering, 2001.
 [^bdd-quality]: Binamungu, L. P., Embury, S. M. and Konstantinou, N. [Characterising the Quality of Behaviour Driven Development Specifications](https://pmc.ncbi.nlm.nih.gov/articles/PMC7251619/), 2020.
 [^runtime-verification]: D'Angelo, B. et al. [A survey of challenges for runtime verification from advanced application domains](https://doi.org/10.1007/s10703-019-00337-w), Formal Methods in System Design, 2019.
@@ -84,4 +88,5 @@ A credible evaluation could select 20 to 50 real GitHub issues across different 
 
 | Date | Time | Reason |
 |---|---|---|
+| 2026-06-04 | 12:17 GMT-3 | Added Code as Agent Harness foundation and harness telemetry as an evidence target for future validation. |
 | 2026-05-29 | 06:05 GMT-3 | Initial academic and technical foundations document, including the critical interview pattern inspired by `grill-me`. |

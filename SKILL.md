@@ -237,9 +237,15 @@ If no automated test exists, create the smallest relevant verification path or d
 
 Never report verification as complete with generic wording. Always include exact commands, exact outcomes and remaining blind spots.
 
+### Phase 7.5: harness telemetry and learning loop
+
+For meaningful work, capture evidence about whether the harness itself was sufficient, not only whether the code changed. Record which context was used, which gates were activated or skipped, which sensors produced useful signal, which blind spots remain and whether the run revealed a candidate improvement to the skill, templates or checklists.
+
+Harness improvement candidates are recommendations, not permission to mutate the skill silently. Treat the harness as operational software: improvements must preserve or strengthen traceability, consent, verification quality, safety and handoff continuity.
+
 ### Phase 8: evaluation report
 
-Create or update `.harness/EVALUATION_REPORT.md` for meaningful work. Include what changed, which requirements were covered, commands run, pass/fail result, unresolved risks, assumptions made, files changed and follow-up tasks.
+Create or update `.harness/EVALUATION_REPORT.md` for meaningful work. Include what changed, which requirements were covered, commands run, pass/fail result, unresolved risks, assumptions made, files changed, harness telemetry, remaining blind spots and follow-up tasks.
 
 ### Phase 9: release gate
 
@@ -303,6 +309,7 @@ Next action
 
 | Date | Time | Reason |
 |---|---|---|
+| 2026-06-04 | 12:17 GMT-3 | Added harness telemetry, regression-free harness improvement rules and stronger shared-state continuity inspired by the Code as Agent Harness paper. |
 | 2026-05-28 | 13:00 GMT-3 | Reworked as a portable skill for any AI coding agent, added YAML frontmatter, activation heuristics, artifact matrix, review-pair handoff and stronger verification rules. |
 | 2026-05-29 | 05:50 GMT-3 | Added semantic specification gate, state-of-the-art review guidance, replay/auditability checks and semantic-system classification inspired by VibeCoding state-of-the-art-driven development. |
 | 2026-05-29 | 06:05 GMT-3 | Added decision grill gate and no-unnecessary-interrogation rule inspired by the `grill-me` critical interview pattern. |

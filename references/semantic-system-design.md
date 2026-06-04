@@ -90,6 +90,8 @@ For architecture tasks, the agent should perform a proportionate review before i
 | Observability | What must be visible during normal operation and during incidents? |
 | Consistency | Is strong consistency required, or is eventual consistency acceptable? |
 | Automation | Can a human intervene, or must the workflow self-heal? |
+| Harness control | Which parts of the workflow are deterministic, which are inferential and which require human approval? |
+| Harness regression | If this workflow or automation changes, how will we know it did not reduce safety, traceability or verification quality? |
 
 ## Decision rule
 
@@ -99,4 +101,5 @@ Prefer the smallest design that preserves the behavior, guarantees, constraints,
 
 | Date | Time | Reason |
 |---|---|---|
+| 2026-06-04 | 12:17 GMT-3 | Added harness control and harness regression prompts for agentic workflows and automation changes. |
 | 2026-05-29 | 05:45 GMT-3 | Added semantic system design reference inspired by state-of-the-art-driven development, adapted as a portable and proportional workflow for coding agents. |
