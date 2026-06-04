@@ -20,11 +20,11 @@ O harness resolve esse problema criando um conjunto de gates. Antes de codar, o 
 
 ## Fundamentos acadêmicos e técnicos
 
-A skill consolida sete linhas de evidência. Ela usa **SWE-bench** como alerta central: tarefas reais de software exigem raciocínio sobre issues, contexto de repositório, múltiplos arquivos e execução, não apenas geração de código em isolamento.[^swebench] Ela usa a literatura sobre agentes LLM para engenharia de software para justificar loops de planejamento, uso de ferramentas, feedback, memória e execução iterativa.[^se-agents] [^react]
+A skill consolida oito linhas de evidência. Ela usa **SWE-bench** como alerta central: tarefas reais de software exigem raciocínio sobre issues, contexto de repositório, múltiplos arquivos e execução, não apenas geração de código em isolamento.[^swebench] Ela usa a literatura sobre agentes LLM para engenharia de software para justificar loops de planejamento, uso de ferramentas, feedback, memória e execução iterativa.[^se-agents] [^react]
 
 Da engenharia de requisitos, a skill herda a necessidade de rastrear intenção, requisito, decisão, implementação, teste e handoff.[^traceability] De BDD e especificação comportamental, herda a prática de converter intenção de negócio em comportamento observável e validável antes do código.[^bdd] De runtime verification, SRE e observabilidade, herda a noção de que sistemas em produção precisam de sinais, invariantes, evidência, rollback e aprendizado operacional.[^runtime-verification] [^sre]
 
-A camada de segurança é sustentada por DevSecOps, especialmente pela integração de práticas, ferramentas e métricas de segurança ao ciclo de desenvolvimento e operação.[^devsecops] A camada humano-IA é sustentada por revisões de Human-AI Experience em IDEs, que recomendam transparência, explicabilidade, controle do usuário e auditoria para mitigar riscos de qualidade e dependência excessiva.[^hax-ide]
+A camada de segurança é sustentada por DevSecOps, especialmente pela integração de práticas, ferramentas e métricas de segurança ao ciclo de desenvolvimento e operação.[^devsecops] A camada humano-IA é sustentada por revisões de Human-AI Experience em IDEs, que recomendam transparência, explicabilidade, controle do usuário e auditoria para mitigar riscos de qualidade e dependência excessiva.[^hax-ide] A camada mais recente é **Code as Agent Harness**, que trata o próprio código e os artefatos operacionais como infraestrutura versionável para raciocínio, ferramentas, memória, ambiente, verificação, telemetria, continuidade e aprendizado do agente.[^code-as-harness]
 
 | Fundamento | Tradução operacional na skill |
 |---|---|
@@ -35,6 +35,7 @@ A camada de segurança é sustentada por DevSecOps, especialmente pela integraç
 | Runtime verification, SRE e observabilidade | Release exige sinais, rollback, logs, métricas, replay quando necessário e evidência pós-lançamento. |
 | DevSecOps | Mudanças sensíveis sobem o rigor de validação, revisão e aprovação. |
 | Human-AI Experience | A skill preserva controle humano, reduz opacidade e exige auditoria do resultado gerado por IA. |
+| Code as Agent Harness | O agente não apenas escreve código; ele opera dentro de um harness de artefatos versionáveis, sensores, memória de estado, telemetria, consentimento de atualização e melhoria sem regressão. |
 
 A versão consolidada dessas referências está em [`academic-foundations.md`](academic-foundations.md).
 
@@ -67,6 +68,7 @@ Intenção de produto
 → Sensores de validação
 → Release seguro
 → Medição pós-lançamento
+→ Telemetria do harness
 → Handoff e aprendizado
 ```
 
@@ -110,15 +112,29 @@ A skill diferencia sensores computacionais e sensores inferenciais. Sensores com
 
 Sensores inferenciais são úteis, mas não substituem sensores determinísticos. Quando não houver teste automatizado disponível, o agente deve criar a menor verificação objetiva possível ou registrar claramente a lacuna.
 
+## Telemetria do harness
+
+A telemetria do harness transforma o encerramento da tarefa em aprendizado operacional explícito. Ela não serve para coletar dados genéricos nem para justificar autoatualização silenciosa; serve para registrar, dentro dos artefatos do projeto, quais decisões, sensores, lacunas e evidências realmente sustentaram a entrega. Com isso, a próxima sessão não começa apenas com um resumo narrativo, mas com sinais verificáveis sobre o que foi testado, o que ficou incerto e quais melhorias do harness poderiam reduzir risco em trabalhos futuros.
+
+| Sinal de telemetria | O que deve ficar explícito | Artefato típico |
+|---|---|---|
+| Contexto utilizado | Quais arquivos, documentos, issues, requisitos ou decisões orientaram a execução. | `STATE.md`, `EVALUATION_REPORT.md` e `HANDOFF.md`. |
+| Gates acionados | Quais gates foram necessários pela natureza da tarefa: produto, contrato, semântica, implementação, avaliação, release ou handoff. | `STATE.md` e relatório de avaliação. |
+| Efetividade dos sensores | Quais testes, builds, lint, typecheck, inspeções ou revisões produziram evidência real. | `TEST_PLAN.md` e `EVALUATION_REPORT.md`. |
+| Pontos cegos | O que não pôde ser validado, quais riscos permaneceram e quais hipóteses ainda dependem de verificação humana ou ambiente real. | `EVALUATION_REPORT.md` e `HANDOFF.md`. |
+| Candidatos de melhoria | Quais ajustes futuros no harness poderiam melhorar rastreabilidade, validação, segurança, continuidade ou custo de coordenação. | `HANDOFF.md`, sem aplicar atualização automática. |
+
 ## Padrão de handoff
 
-A skill exige handoff em todo trabalho significativo. O handoff deve permitir que outra pessoa ou outro agente continue sem reconstruir a sessão mental anterior. Um bom handoff informa estado atual, o que mudou, comandos executados, arquivos alterados, riscos, pendências e próxima ação recomendada.
+A skill exige handoff em todo trabalho significativo. O handoff deve permitir que outra pessoa ou outro agente continue sem reconstruir a sessão mental anterior. Um bom handoff informa estado atual, o que mudou, comandos executados, arquivos alterados, riscos, pendências e próxima ação recomendada. Na versão atual, essa continuidade ficou mais explícita: `STATE.md` deve preservar escopo aprovado, invariante atual, último estado verificado, links de evidência, notas de coordenação e ações pendentes inseguras; `HANDOFF.md` deve complementar esse registro com detalhes de continuidade, incluindo ponto exato de retomada, decisões já tomadas, lacunas abertas e recomendações para o próximo responsável.
 
 ## Higiene de coding e atualização da própria skill
 
 A evolução mais recente reforça duas disciplinas pequenas, mas importantes. A primeira é a higiene de coding: antes de editar, o agente deve pensar no objetivo e no raio de impacto; durante a implementação, deve escolher a solução mais simples suficiente; ao alterar arquivos, deve manter mudanças cirúrgicas; e antes de encerrar, deve verificar cada etapa com evidência objetiva ou registrar claramente a lacuna.
 
 A segunda é a verificação de origem da própria skill. Em tarefas significativas, se houver acesso à internet, o agente pode consultar o repositório público, ler o `README.md`, comparar a cópia local e avisar o usuário quando houver mudança relevante. Essa rotina preserva controle humano: o agente pergunta antes de atualizar e nunca substitui a versão local em silêncio.
+
+A terceira é a regra de **regression-free harness improvement**. Melhorar a própria skill não pode significar perder garantias já conquistadas. Toda atualização deve preservar rastreabilidade, sensores, critérios objetivos, continuidade de handoff, consentimento de atualização e salvaguardas de segurança. Quando uma simplificação for desejável, ela precisa ser justificada por evidência e não pode remover uma proteção sem substituí-la por alternativa equivalente ou melhor.
 
 ## Como adaptar em ferramentas diferentes
 
@@ -134,6 +150,7 @@ Em agentes baseados em diretório de skills, copie o diretório inteiro da skill
 [^sre]: Google. [Site Reliability Engineering](https://sre.google/sre-book/table-of-contents/), 2016.
 [^devsecops]: Zhao, X., Clear, T., Lal, R. [Identifying the primary dimensions of DevSecOps: A multi-vocal literature review](https://www.sciencedirect.com/science/article/pii/S0164121224001080), Journal of Systems and Software, 2024.
 [^hax-ide]: Sergeyuk, A. et al. [Human-AI Experience in Integrated Development Environments: A Systematic Literature Review](https://arxiv.org/abs/2503.06195), Empirical Software Engineering, 2026.
+[^code-as-harness]: Ning et al. [Code as Agent Harness](https://arxiv.org/abs/2605.18747), arXiv, 2026.
 
 ## Histórico de alterações
 
@@ -144,3 +161,4 @@ Em agentes baseados em diretório de skills, copie o diretório inteiro da skill
 | 2026-05-29 | 06:00 GMT-3 | Inclusão de seção de fundamentos acadêmicos e técnicos na introdução, conectando o storytelling da skill a benchmarks, literatura de agentes LLM, BDD, rastreabilidade, verificação, DevSecOps, SRE e Human-AI Experience. |
 | 2026-05-29 | 06:05 GMT-3 | Inclusão de fundamentos acadêmicos consolidados e adaptação do padrão `grill-me` como decision grill para crítica de planos e designs. |
 | 2026-06-01 | 18:45 GMT-3 | Inclusão de seção sobre higiene de coding e verificação da versão upstream da skill com consentimento explícito antes de atualização. |
+| 2026-06-04 | 12:26 GMT-3 | Atualização do guia consolidado para incorporar **Code as Agent Harness** como fundamento acadêmico-operacional, telemetria do harness, continuidade aprimorada em `STATE.md` e `HANDOFF.md` e regra de melhoria sem regressão. |

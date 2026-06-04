@@ -16,11 +16,11 @@ Essa tese não parte apenas de experiência prática. Ela dialoga com uma linha 
 |---|---|
 | `SKILL.md` | Skill principal, com frontmatter, gatilhos de uso, workflow, gates e regras não negociáveis. |
 | `references/` | Módulos operacionais lidos sob demanda: descoberta de produto, PRD/spec, design semântico, verificação de versão, release/medição e squad mode. |
-| `templates/` | Templates reutilizáveis para `AGENTS.md`, contrato, especificação semântica, critérios de aceite, plano de testes, estado, avaliação e handoff. |
+| `templates/` | Templates reutilizáveis para `AGENTS.md`, contrato, especificação semântica, critérios de aceite, plano de testes, estado, avaliação e handoff, incluindo `STATE.md` com campos explícitos de continuidade e `HANDOFF.md` com detalhes operacionais para retomada por outra sessão ou agente. |
 | `checklists/` | Checklist de execução para uso em revisão ou antes de encerrar uma tarefa. |
 | `examples/` | Exemplo mínimo de aplicação da skill em uma tarefa real. |
 | `docs/` | Guia conceitual consolidado para humanos entenderem e adaptarem o método. |
-| `docs/academic-foundations.md` | Fundamentos acadêmicos e técnicos que dão lastro ao método: agentes LLM, benchmarks de software engineering, BDD, rastreabilidade, verificação, DevSecOps, SRE e colaboração humano-IA. |
+| `docs/academic-foundations.md` | Fundamentos acadêmicos e técnicos que dão lastro ao método: agentes LLM, benchmarks de software engineering, BDD, rastreabilidade, verificação, DevSecOps, SRE, colaboração humano-IA e **Code as Agent Harness**. |
 
 ## Por que isso existe
 
@@ -34,11 +34,11 @@ Sem harness, um agente tende a trabalhar como um dev novato largado numa base de
 
 ## Base acadêmica e técnica
 
-A skill se apoia em sete pilares de literatura e prática técnica. O primeiro é a constatação, reforçada por benchmarks como **SWE-bench**, de que resolver issues reais de GitHub exige muito mais do que completar uma função isolada: exige compreender codebases, coordenar mudanças em múltiplos arquivos e interagir com ambientes de execução.[^swebench] O segundo é a pesquisa sobre agentes LLM para engenharia de software, que descreve o uso de planejamento, memória, ferramentas, execução iterativa e feedback como componentes essenciais para autonomia prática.[^se-agents] [^react]
+A skill se apoia em oito pilares de literatura e prática técnica. O primeiro é a constatação, reforçada por benchmarks como **SWE-bench**, de que resolver issues reais de GitHub exige muito mais do que completar uma função isolada: exige compreender codebases, coordenar mudanças em múltiplos arquivos e interagir com ambientes de execução.[^swebench] O segundo é a pesquisa sobre agentes LLM para engenharia de software, que descreve o uso de planejamento, memória, ferramentas, execução iterativa e feedback como componentes essenciais para autonomia prática.[^se-agents] [^react]
 
 O terceiro pilar vem da engenharia de requisitos e da rastreabilidade: especificações, contratos, critérios de aceite e vínculos entre requisitos, implementação e testes reduzem ambiguidade e melhoram manutenção.[^traceability] O quarto pilar vem de BDD e especificação por comportamento, que sustentam a ideia de traduzir intenção de negócio em cenários verificáveis antes da implementação.[^bdd] O quinto pilar é verificação em tempo de execução e observabilidade, especialmente quando o comportamento não pode ser validado apenas por inspeção estática.[^runtime-verification] [^sre]
 
-O sexto pilar é DevSecOps: segurança precisa entrar no ciclo de desenvolvimento, operação, ferramentas e métricas, e não aparecer apenas como revisão tardia.[^devsecops] O sétimo é a pesquisa sobre colaboração humano-IA em IDEs, que recomenda transparência, explicabilidade, controle humano e auditoria de código gerado por IA para reduzir dependência excessiva e riscos de qualidade.[^hax-ide]
+O sexto pilar é DevSecOps: segurança precisa entrar no ciclo de desenvolvimento, operação, ferramentas e métricas, e não aparecer apenas como revisão tardia.[^devsecops] O sétimo é a pesquisa sobre colaboração humano-IA em IDEs, que recomenda transparência, explicabilidade, controle humano e auditoria de código gerado por IA para reduzir dependência excessiva e riscos de qualidade.[^hax-ide] O oitavo é o princípio **Code as Agent Harness**, segundo o qual o código também pode funcionar como infraestrutura operacional do agente: memória, ferramentas, ambiente, verificação, artefatos compartilhados, telemetria e ciclo de melhoria versionável.[^code-as-harness]
 
 | Pilar | Como aparece na skill |
 |---|---|
@@ -49,6 +49,7 @@ O sexto pilar é DevSecOps: segurança precisa entrar no ciclo de desenvolviment
 | Runtime verification, SRE e observabilidade | Release, rollback, logs, métricas, replay e evidências operacionais entram como parte do pronto. |
 | DevSecOps | Mudanças com dados, autenticação, permissões, segredos e produção sobem o nível de rigor. |
 | Human-AI Experience | A skill preserva controle humano, transparência, revisão e auditoria do trabalho do agente. |
+| Code as Agent Harness | O agente trata o próprio workflow como harness operacional versionável, com telemetria, sensores, continuidade de estado e melhoria sem regressão. |
 
 Para uma leitura consolidada das fontes, veja [`docs/academic-foundations.md`](docs/academic-foundations.md).
 
@@ -81,8 +82,11 @@ Product Intent
 → Evaluation Gates
 → Release Harness
 → Measurement Loop
+→ Harness Telemetry & Learning Loop
 → Learning / Handoff
 ```
+
+A etapa de **Harness Telemetry & Learning Loop** registra qual contexto foi usado, quais gates foram acionados, quais sensores funcionaram, quais pontos cegos permaneceram e quais melhorias futuras podem ser propostas sem alterar a skill silenciosamente. Essa camada transforma avaliação e handoff em sinais reutilizáveis para evolução do harness, mantendo consentimento humano e rastreabilidade.
 
 ## Modos de execução
 
@@ -119,6 +123,8 @@ docs/decisions/DECISION_LOG.md
 docs/release/RELEASE_PLAN.md
 ```
 
+A continuidade entre sessões fica concentrada principalmente em `.harness/STATE.md` e `.harness/HANDOFF.md`. O `STATE.md` deve registrar escopo aprovado, invariante atual, último estado verificado, links de evidência, notas de coordenação e ações pendentes inseguras. O `HANDOFF.md` deve complementar esse estado com detalhes de continuidade suficientes para que outra pessoa, sessão ou agente retome o trabalho sem reconstruir contexto por memória implícita.
+
 ## Quando usar
 
 Use esta skill quando a tarefa envolver construir uma aplicação com agentes de IA, transformar ideia em especificação, implementar feature com frontend, backend, auth, banco ou integração, corrigir bug com impacto relevante, mexer em arquitetura, segurança, permissões, dados ou produção, refatorar código que precisa continuar funcionando, lançar funcionalidade para usuários reais, medir adoção, impacto e aprendizado, ou definir comportamentos, garantias, constraints, eventos, replay, auditabilidade e observabilidade de sistemas AI-native.
@@ -145,6 +151,7 @@ python scripts/validate_skill.py
 
 A validação verifica a presença de frontmatter no `SKILL.md`, referências obrigatórias e templates essenciais.
 
+Além dessa validação estrutural, a evolução da skill segue a regra de **regression-free harness improvement**: qualquer melhoria no próprio harness deve preservar a rastreabilidade já existente, manter sensores e critérios objetivos, não reduzir a qualidade de handoff, não remover salvaguardas de segurança ou consentimento e não substituir comportamento validado por uma simplificação sem evidência.
 
 [^swebench]: Jimenez, C. E. et al. [SWE-bench: Can Language Models Resolve Real-World GitHub Issues?](https://arxiv.org/abs/2310.06770), ICLR 2024.
 [^se-agents]: Liu, J. et al. [A Survey on Large Language Model based Autonomous Agents for Software Engineering](https://arxiv.org/abs/2409.02977), ACM Transactions on Software Engineering and Methodology, 2025.
@@ -155,6 +162,7 @@ A validação verifica a presença de frontmatter no `SKILL.md`, referências ob
 [^sre]: Google. [Site Reliability Engineering](https://sre.google/sre-book/table-of-contents/), 2016.
 [^devsecops]: Zhao, X., Clear, T., Lal, R. [Identifying the primary dimensions of DevSecOps: A multi-vocal literature review](https://www.sciencedirect.com/science/article/pii/S0164121224001080), Journal of Systems and Software, 2024.
 [^hax-ide]: Sergeyuk, A. et al. [Human-AI Experience in Integrated Development Environments: A Systematic Literature Review](https://arxiv.org/abs/2503.06195), Empirical Software Engineering, 2026.
+[^code-as-harness]: Ning et al. [Code as Agent Harness](https://arxiv.org/abs/2605.18747), arXiv, 2026.
 
 ## Autor
 
@@ -188,3 +196,4 @@ Quando a tarefa envolver descoberta de produto, PRD, alteração de código, fea
 | 2026-05-29 | 06:00 GMT-3 | Inclusão de base acadêmica e técnica no storytelling inicial, conectando a skill a pesquisas sobre agentes LLM, SWE-bench, BDD, rastreabilidade, verificação, DevSecOps, SRE e colaboração humano-IA. |
 | 2026-05-29 | 06:05 GMT-3 | Inclusão de base acadêmica, documento `academic-foundations.md` e adaptação do padrão `grill-me` como `DECISION_GRILL.md`. |
 | 2026-06-01 | 18:45 GMT-3 | Inclusão das regras leves de higiene de coding e do protocolo de verificação de versão com consentimento antes de atualizar a skill local. |
+| 2026-06-04 | 12:26 GMT-3 | Atualização da documentação pública para refletir o fundamento **Code as Agent Harness**, a telemetria do harness, os campos aprimorados de continuidade em `STATE.md` e `HANDOFF.md` e a regra de melhoria sem regressão do harness. |
