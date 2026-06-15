@@ -225,6 +225,8 @@ For each task:
 
 Do not mix unrelated tasks in the same loop.
 
+If the agent starts drifting from the contract during a long task, for example reintroducing out-of-scope behavior, contradicting the data model, forgetting the agreed user flow or losing earlier decisions as the context window fills, stop and re-anchor before continuing. Re-paste or re-read the governing artifacts, normally `.harness/CONTRACT.md`, the data model and the acceptance criteria, then resume from the restated task. Re-anchoring is cheaper than letting an agent rebuild on a drifted understanding. For the detailed trigger and recovery steps, read `references/context-reanchoring.md`.
+
 ### Phase 7: feedback sensors
 
 Use computational sensors first: unit tests, integration tests, e2e tests, lint, typecheck, build, static analysis, schema validation, migration dry-run, replay/audit checks, accessibility checks and security scans when applicable.
@@ -314,3 +316,4 @@ Next action
 | 2026-05-29 | 05:50 GMT-3 | Added semantic specification gate, state-of-the-art review guidance, replay/auditability checks and semantic-system classification inspired by VibeCoding state-of-the-art-driven development. |
 | 2026-05-29 | 06:05 GMT-3 | Added decision grill gate and no-unnecessary-interrogation rule inspired by the `grill-me` critical interview pattern. |
 | 2026-06-01 | 18:45 GMT-3 | Added lightweight coding hygiene rules and an origin version check protocol with explicit user consent before any skill update. |
+| 2026-06-12 | 12:00 GMT-3 | Added a mid-run context re-anchoring step to the implementation loop, with a matching checklist item and `references/context-reanchoring.md`, generalizing the context-recovery practice from Vinícius Lana / AI Coders Academy (PREVC). |

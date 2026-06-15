@@ -46,6 +46,7 @@ Use this checklist before closing any meaningful coding-agent task.
 | Each change maps to requirement IDs or clear task objectives. |  |  |
 | Each changed line is defensible as part of the original user-approved scope or an approved prerequisite. |  |  |
 | Scope did not expand silently. |  |  |
+| If the agent drifted from the contract during the task, it re-anchored on the governing artifacts before continuing. |  |  |
 | Tests were not weakened or bypassed. |  |  |
 
 ## Verification
@@ -83,3 +84,4 @@ Use this checklist before closing any meaningful coding-agent task.
 | 2026-05-28 | 13:20 GMT-3 | Updated checklist to match the portable harness workflow and artifact matrix. |
 | 2026-05-29 | 05:55 GMT-3 | Added semantic design checks for behavior contracts, replay, auditability, observability and proportional architecture review. |
 | 2026-06-01 | 18:45 GMT-3 | Added explicit surgical-change scope check aligned with the lightweight coding hygiene rules. |
+| 2026-06-12 | 12:00 GMT-3 | Added a context re-anchoring check to the Implementation section. |
