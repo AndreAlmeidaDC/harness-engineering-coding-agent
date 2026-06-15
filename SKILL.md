@@ -245,6 +245,8 @@ For meaningful work, capture evidence about whether the harness itself was suffi
 
 Harness improvement candidates are recommendations, not permission to mutate the skill silently. Treat the harness as operational software: improvements must preserve or strengthen traceability, consent, verification quality, safety and handoff continuity.
 
+When the agent makes a mistake that a durable rule could have prevented, prefer writing the rule over only fixing the instance. A correction in the current conversation fixes this run; a rule recorded in the project's agent-instruction file (for example `AGENTS.md`) or in a relevant artifact fixes every future run. This applies to recurring mistakes, not one-off slips. Keep such rules specific and falsifiable, and subject them to the same scope and safety constraints as any other change.
+
 ### Phase 8: evaluation report
 
 Create or update `.harness/EVALUATION_REPORT.md` for meaningful work. Include what changed, which requirements were covered, commands run, pass/fail result, unresolved risks, assumptions made, files changed, harness telemetry, remaining blind spots and follow-up tasks.
@@ -272,6 +274,8 @@ End every meaningful run with `.harness/HANDOFF.md`. Include current state, comp
 When using `review-pair`, the implementation agent must provide requirement IDs addressed, files changed, commands run, known risks, verification gaps and suggested review focus.
 
 The evaluation agent must not assume correctness from the implementation summary. It must verify against the contract and inspect changed files.
+
+Whenever work is judged against a rubric, acceptance criteria or a quality bar, the agent that judges must not be the same agent, in the same context, that produced the work. An author scoring its own output is subject to self-preferential bias and tends to pass it. This is the core reason `review-pair` exists: separate the producing context from the judging context. When a true second agent or session is unavailable, make the check deterministic instead (tests, lint, schema validation) rather than relying on the author's self-assessment against the rubric.
 
 For ambiguous plans, the reviewer may act as a critical interviewer: identify the weakest assumptions, walk the decision tree, answer codebase-discoverable questions directly and ask only one blocking user question at a time.
 
@@ -317,3 +321,4 @@ Next action
 | 2026-05-29 | 06:05 GMT-3 | Added decision grill gate and no-unnecessary-interrogation rule inspired by the `grill-me` critical interview pattern. |
 | 2026-06-01 | 18:45 GMT-3 | Added lightweight coding hygiene rules and an origin version check protocol with explicit user consent before any skill update. |
 | 2026-06-12 | 12:00 GMT-3 | Added a mid-run context re-anchoring step to the implementation loop, with a matching checklist item and `references/context-reanchoring.md`, generalizing a context-recovery practice from Vinícius Lana / AI Coders Academy. |
+| 2026-06-13 | 12:00 GMT-3 | Hardened two existing rules: capture recurring mistakes as durable project rules (Phase 7.5), and require that rubric-based judging is never done by the authoring context (review-pair). |

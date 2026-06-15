@@ -2,7 +2,7 @@
   "name": "harness-engineering-coding-agent",
   "title": "Harness Engineering Coding Agent",
   "description": "Portable harness engineering workflow for AI coding agents.",
-  "version": "2026.06.12",
+  "version": "2026.06.13",
   "maturity": "stable",
   "origin_url": "https://github.com/AndreAlmeidaDC/harness-engineering-coding-agent",
   "origin_git_url": "https://github.com/AndreAlmeidaDC/harness-engineering-coding-agent.git",
@@ -23,7 +23,7 @@
       "reason": "No package installation performed by the skill."
     }
   },
-  "last_standardized_at": "2026-06-12 GMT-3",
+  "last_standardized_at": "2026-06-13 GMT-3",
   "required_files": [
     "SKILL.md",
     "README.md",
