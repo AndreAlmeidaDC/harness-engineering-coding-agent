@@ -225,6 +225,8 @@ For each task:
 
 Do not mix unrelated tasks in the same loop.
 
+**Prefer test-first when behavior is specifiable.** When the task involves testable logic whose expected behavior can be derived from the contract or acceptance criteria, write the test before the implementation: encode the expected behavior in a test that fails first, make the smallest change that passes it, then refactor under the protection of that test (red-green-refactor). A passing test should be evidence that the contract is met, not only that the code runs. This is optional and conditional, not a gate. Skip it for exploratory work, throwaway prototypes, or behavior and UI that cannot yet be specified.
+
 If the agent starts drifting from the contract during a long task, for example reintroducing out-of-scope behavior, contradicting the data model, forgetting the agreed user flow or losing earlier decisions as the context window fills, stop and re-anchor before continuing. Re-paste or re-read the governing artifacts, normally `.harness/CONTRACT.md`, the data model and the acceptance criteria, then resume from the restated task. Re-anchoring is cheaper than letting an agent rebuild on a drifted understanding. For the detailed trigger and recovery steps, read `references/context-reanchoring.md`.
 
 ### Phase 7: feedback sensors
@@ -322,3 +324,4 @@ Next action
 | 2026-06-01 | 18:45 GMT-3 | Added lightweight coding hygiene rules and an origin version check protocol with explicit user consent before any skill update. |
 | 2026-06-12 | 12:00 GMT-3 | Added a mid-run context re-anchoring step to the implementation loop, with a matching checklist item and `references/context-reanchoring.md`, generalizing a context-recovery practice from Vinícius Lana / AI Coders Academy. |
 | 2026-06-13 | 12:00 GMT-3 | Hardened two existing rules: capture recurring mistakes as durable project rules (Phase 7.5), and require that rubric-based judging is never done by the authoring context (review-pair). |
+| 2026-06-24 | 12:00 GMT-3 | Added an optional, conditional test-first (red-green-refactor) directive to the implementation loop, with a matching checklist item. Test-first is a standard XP engineering practice, not a gate. |
