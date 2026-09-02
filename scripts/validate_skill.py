@@ -1,89 +1,54 @@
+#!/usr/bin/env python3
 from pathlib import Path
 import json
 import re
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-required_files = [
-    "SKILL.md",
-    "README.md",
-    "CHANGELOG.md",
-    "CONTRIBUTING.md",
-    "GOVERNANCE.md",
-    "metadata.json",
-    "references/product-engineering-discovery.md",
-    "references/prd-specification-builder.md",
-    "references/semantic-system-design.md",
-    "references/version-check.md",
-    "references/release-measurement-loop.md",
-    "references/squad-mode.md",
-    "docs/academic-foundations.md",
-    "templates/AGENTS.md",
-    "templates/CONTRACT.md",
-    "templates/SEMANTIC_SPEC.md",
-    "templates/DECISION_GRILL.md",
-    "templates/ACCEPTANCE_CRITERIA.md",
-    "templates/TEST_PLAN.md",
-    "templates/EVALUATION_REPORT.md",
-    "templates/HANDOFF.md",
-    "templates/STATE.md",
+REQUIRED = [
+    "SKILL.md", "README.md", "CHANGELOG.md", "CONTRIBUTING.md", "GOVERNANCE.md",
+    "metadata.json", "references/version-check.md", "references/execution-control.md",
+    "references/context-and-state.md", "references/verification-release.md",
+    "references/observability-learning.md", "templates/RUN_CONTRACT.json",
+    "templates/TASK.md", "templates/EVALUATION_REPORT.md", "templates/HANDOFF.md",
+    "scripts/validate_run_contract.py", "scripts/test_validator.py"
 ]
 
-errors = []
 
-skill = ROOT / "SKILL.md"
-readme = ROOT / "README.md"
-metadata_path = ROOT / "metadata.json"
+def fail(message: str) -> None:
+    print("FAIL:", message)
+    raise SystemExit(1)
 
-if not skill.exists():
-    errors.append("Missing SKILL.md")
-else:
-    text = skill.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        errors.append("SKILL.md must start with YAML frontmatter")
-    if "name: harness-engineering-coding-agent" not in text:
-        errors.append("SKILL.md frontmatter must include the expected name")
-    if "description:" not in text:
-        errors.append("SKILL.md frontmatter must include description")
-    if "## Origin version check" not in text:
-        errors.append("SKILL.md must include Origin version check")
-    if "Never perform silent self-update" not in text:
-        errors.append("SKILL.md must explicitly prohibit silent self-update")
-    if len(text.splitlines()) > 550:
-        errors.append("SKILL.md should stay under 550 lines")
 
-if readme.exists():
-    readme_text = readme.read_text(encoding="utf-8")
-    if "## Verificação de versão com consentimento" not in readme_text:
-        errors.append("README.md must include consent-based version check section")
-else:
-    errors.append("Missing README.md")
+def main() -> None:
+    missing = [p for p in REQUIRED if not (ROOT / p).exists()]
+    if missing:
+        fail("missing: " + ", ".join(missing))
+    metadata = json.loads((ROOT / "metadata.json").read_text(encoding="utf-8"))
+    version = str(metadata.get("version", ""))
+    if not re.fullmatch(r"\d{4}\.\d{2}\.\d{2}", version):
+        fail("version must use YYYY.MM.DD")
+    if metadata.get("origin_url") != "https://github.com/AndreAlmeidaDC/harness-engineering-coding-agent":
+        fail("wrong origin")
+    corpus = "\n".join((ROOT / p).read_text(encoding="utf-8") for p in REQUIRED if p.endswith(".md"))
+    for concept in [version, "run contract", "DAG", "stop conditions", "independent", "rollback", "observability", "boundary"]:
+        if concept.lower() not in corpus.lower():
+            fail("missing concept: " + concept)
+    stale = [
+        "End every meaningful run with `.harness/HANDOFF.md`",
+        "Every meaningful requirement must have an ID",
+        "If there are more than five steps",
+        "harness-engineering-coding-agent/main/metadata.json"
+    ]
+    for phrase in stale:
+        if phrase.lower() in corpus.lower():
+            fail("stale mandatory process: " + phrase)
+    proc = subprocess.run([sys.executable, str(ROOT / "scripts" / "validate_run_contract.py"), str(ROOT / "templates" / "RUN_CONTRACT.json")], capture_output=True, text=True)
+    if proc.returncode:
+        fail(proc.stdout + proc.stderr)
+    print(f"Validation passed. version={version}")
 
-if metadata_path.exists():
-    try:
-        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        errors.append(f"metadata.json is not valid JSON: {exc}")
-    else:
-        for key in ["name", "version", "origin_url", "default_branch", "update_policy"]:
-            if key not in metadata:
-                errors.append(f"metadata.json missing key: {key}")
-        policy = metadata.get("update_policy", {})
-        if policy.get("requires_user_consent") is not True:
-            errors.append("metadata.json update_policy.requires_user_consent must be true")
-        if policy.get("silent_self_update_allowed") is not False:
-            errors.append("metadata.json update_policy.silent_self_update_allowed must be false")
-else:
-    errors.append("Missing metadata.json")
 
-for rel in required_files:
-    if not (ROOT / rel).exists():
-        errors.append(f"Missing required file: {rel}")
-
-if errors:
-    print("Validation failed:")
-    for error in errors:
-        print(f"- {error}")
-    sys.exit(1)
-
-print("Validation passed.")
+if __name__ == "__main__":
+    main()
