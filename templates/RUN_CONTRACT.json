@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "run_id": "RUN-YYYYMMDD-001",
+  "goal": "Describe the observable outcome of this run.",
+  "task_type": "feature",
+  "risk": "medium",
+  "scope": {
+    "include": ["src/feature/**"],
+    "exclude": ["production", "billing", "unrelated refactors"]
+  },
+  "workspace": {
+    "isolation": "worktree",
+    "branch": "feat/example",
+    "base_ref": "main"
+  },
+  "permissions": {
+    "filesystem": "workspace-only",
+    "network": "deny-by-default",
+    "credentials": "none",
+    "production": false,
+    "financial_actions": false,
+    "public_communications": false
+  },
+  "requirements": [
+    {"id": "REQ-001", "text": "The user can complete the target flow.", "source": "user"}
+  ],
+  "tasks": [
+    {
+      "id": "TASK-001",
+      "title": "Implement the smallest behavior slice",
+      "depends_on": [],
+      "owner": "implementer",
+      "status": "ready",
+      "files": ["src/feature/**"],
+      "requirement_ids": ["REQ-001"],
+      "done_when": ["The specified behavior is observable"],
+      "sensors": ["targeted automated test passes"],
+      "rollback": "Revert this task commit"
+    },
+    {
+      "id": "TASK-002",
+      "title": "Independently verify the behavior",
+      "depends_on": ["TASK-001"],
+      "owner": "verifier",
+      "status": "blocked",
+      "files": [],
+      "requirement_ids": ["REQ-001"],
+      "done_when": ["Evidence covers REQ-001 without relying on the implementer summary"],
+      "sensors": ["test output", "diff review"],
+      "rollback": "Return TASK-001 to ready with findings"
+    }
+  ],
+  "terminal_states": ["done", "blocked", "cancelled"],
+  "stop_conditions": [
+    "Two consecutive attempts produce no new diagnostic evidence",
+    "The task requires scope, permission, cost or production access not approved in this contract"
+  ],
+  "escalation_conditions": [
+    "A product decision cannot be inferred from repository evidence",
+    "A destructive or production-impacting action becomes necessary"
+  ],
+  "verification": {
+    "independent_context_required": true,
+    "required_sensors": ["tests", "diff review"],
+    "blind_spots_must_be_reported": true
+  },
+  "release": {
+    "reaches_users": false,
+    "approval_required": true,
+    "rollback": "Revert the merged change or disable the feature flag"
+  },
+  "handoff": {
+    "mode": "boundary",
+    "required_when": ["session ends with pending work", "owner changes", "review or release boundary"]
+  }
+}
